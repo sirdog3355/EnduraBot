@@ -1,0 +1,78 @@
+site_name: EnduraBot Documentation
+site_url: http://127.0.0.1:8000/
+repo_url: https://github.com/sirdog9001/EnduraBot/
+repo_name: EnduraBot
+use_directory_urls: true
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: indigo
+  icon:
+    repo: fontawesome/brands/github
+  logo: /assets/EnduraBot_Logo.png
+  favicon: /assets/EnduraBot_Logo.ico
+  features:
+    - header.autohide
+    - navigation.instant
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.footer
+    - toc.integrate
+    - toc.follow
+    - content.code.annotate
+    - search.suggest
+    - search.highlight
+    - content.tooltips
+    - content.code.copy
+
+extra_css:
+  - assets/custom.css
+
+markdown_extensions:
+  - admonition
+  - md_in_html
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.inlinehilite
+  - def_list
+  - tables
+  - toc:
+      permalink: true
+  - abbr
+  - footnotes
+  - attr_list
+  - pymdownx.emoji:
+     emoji_generator: !!python/name:material.extensions.emoji.to_svg
+     emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.snippets:
+      auto_append:
+        - docs/includes/glossary.md
+nav:
+  - Welcome: index.md
+  - Features & Commands:
+      - Commands: commands.md
+      - Listeners: listeners.md
+      - Tasks: tasks.md
+  - Developers:
+      - Getting Started: getting-started.md
+      - Configuration: configuration.md
+      - Permissions: permissions.md
+      - Classes: classes.md
+      - Random Quote: rquote.md
+      - External APIs:
+        - isthereanydeal-api.md
+
+watch:
+  - docs/includes
+
+copyright: All text is available under the <a href="https://github.com/sirdog9001/EnduraBot/blob/main/LICENSE.md">MIT license</a>.
+
+extra:
+  generator: true
