@@ -45,7 +45,9 @@ The following is the available dialogue that ships with EnduraBot's default `hr`
     ]
 ```
 
-When `/rquote` is run a theme is chosen at random amongst the themes set forth at `variables.json`. It then uses the `opener_key` found in the selected theme's data and matches it to the name of a list of strings at `misc_text.json`, in this case being `ooc_hr`. As previously explained, this matches dialogue options to a given theme, avoiding dialogue mismatching.
+When `/rquote` is run a theme is chosen at random amongst the themes set forth at `variables.json`. It then uses the `opener_key` found in the selected theme's data and matches it to the key of the same name in `misc_text.json`, in this case being `ooc_hr`. The `opener_key` for each theme should have an entry in `misc_text.json` that consists of a list of string values representing dialogue. 
+
+As previously explained, this matches dialogue options to a given theme, avoiding dialogue mismatching.
 
 The green box above is the `title` set at `variables.json`. The red box is a selected dialogue option as demonstrated in the above code-block.
 

@@ -1,4 +1,4 @@
-# Use Guide
+# User Guide
 EnduraBot's use is very straightforward. This page explains why that is and any additional information that may be of use to end-users.
 
 ## Commands
