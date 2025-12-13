@@ -13,19 +13,19 @@ API_TOKEN = os.getenv('itad-token')
 class ItadGameSearchHandler():
     def __init__(self, title):
         
-        base_url_by_name = "https://api.isthereanydeal.com/games/lookup/v1"
+        base_url_by_name = "https://api.isthereanydeal.com/games/search/v1"
         base_name_payload = {'key': API_TOKEN, 'title': title}
         base_payload = requests.get(base_url_by_name, params=base_name_payload)
 
         if self.check_connection() == False:
             raise TypeError("API token missing or invalid.")
-
-        base_data = base_payload.json()
         
-        if base_data["found"] == False or base_data["game"]["type"] == None:
+        if not base_payload.json():
             raise ValueError("Game not found.")
 
-        game_id = base_data["game"]["id"]
+        base_data = base_payload.json()[0]
+
+        game_id = base_data["id"]
 
         full_url = "https://api.isthereanydeal.com/games/info/v2"
         full_payload = {'key': API_TOKEN, 'id': game_id}

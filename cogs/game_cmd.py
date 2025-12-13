@@ -61,7 +61,7 @@ class game_cmd(commands.Cog):
 
         no_results_embed = discord.Embed(
             title=":wastebasket: No Results",
-            description=f"{itad_name} could not find a game with title `{title}`. Please try again.\n\n The API is very finnicky; special characters, punctuation, and full-series declaration are typically necessary.\n\n For example: `Skyrim` will not turn up results, but `The Elder Scrolls V: Skyrim Special Edition` will.",
+            description=f"{itad_name} could not find a game with title `{title}`. Please try again.",
             color=discord.Color.purple()
         )
 
