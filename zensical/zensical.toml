@@ -18,7 +18,7 @@ extra_css = ["stylesheets/custom.css"]
 # meaningful description of the site content for use by search engines.
 #
 # Read more: https://zensical.org/docs/setup/basics/#site_description
-site_description = ""
+site_description = "Lorem ipsum"
 
 # The site_author attribute. This is used in the HTML head element.
 #
@@ -35,7 +35,7 @@ site_url = "https://endurabot.edcgaming.org/"
 #
 # Read more: https://zensical.org/docs/setup/basics/#copyright
 copyright = """
-All text is available under an <a href="https://github.com/sirdog3355/EnduraBot/blob/main/LICENSE.md">MIT license</a>.
+Text is available under the <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0</a> license.
 
 """
 
