@@ -18,7 +18,7 @@ To get the ID for something you will typically right-click on it and select the 
 
 ## Bot setup and invitation
 !!! warning
-    It is best practice to *not* give bots the `Administrator` permission unless it is *needed* and you trust the bot. Strictly speaking, EnduraBot should not *need* it, but because EnduraBot is developed for a single non-public facing Discord server, effort was not put into responsibly limiting it's required permissions.
+    It is best practice to *not* give bots the `Administrator` permission unless it is *needed* and you trust the bot. Strictly speaking, EnduraBot should not *need* it, but because EnduraBot is developed for a single low-risk Discord server, effort was not put into responsibly limiting it's required permissions.
 
 Before we do anything with EnduraBot's code you'll need a bot application through the [Discord developer portal](https://discord.com/developers/applications) in order to allow the bot to join a server.
 
@@ -36,8 +36,6 @@ Next, go to the `OAuth2` tab. Scroll down to the `OAuth2 URL Generator` box and 
 When you select `bot` a new sub-box should appear below called `BOT PERMISSIONS`. Select `Administrator`.
 
 At the very bottom you will have a `Generated URL`. Ensure the option above it is set to `Guild Install` and not `User Install`. Then paste that into a browser and Discord will guide you through inviting the bot.
-
-[^1]: You can use the image located at `/mkdocs/docs/assets/EnduraBot_Logo.png` in the EnduraBot repository if you would like.
 
 ## IsThereAnyDeal API token
 !!! warning
@@ -253,3 +251,6 @@ EnduraBot utilizes a SQLITE database to hold information that must persist reboo
 
 ## About Docker
 The live bot that runs for EDC is hosted in a Docker container on the community's infrastructure. `docker-compose.yml` and `Dockerfile` are used for this purpose. You are, per the license, free to use these files to do this yourself.  I simply do not feel confident documenting how to do so (nor am I interested in maintaining such documentation).
+
+
+[^1]: You can use the image located at `zensical/docs/images/EnduraBot_Logo.png` in the EnduraBot repository if you would like.

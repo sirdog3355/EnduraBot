@@ -1,3 +1,5 @@
+# Random Quote (/rquote) Breakdown
+
 `/rquote` is a command that takes quotes from a configured channel and presents it in fictional situations for comedic effect.
 
 ## Theme creation
@@ -28,7 +30,7 @@ The following is one of the default themes that ships with EnduraBot, held under
 There are no limits to the number of themes that can be added. Themes are chosen randomly.
 
 ### Dialogue
-![Example of /quote](assets/rquote-example.png)
+![Example of /quote](images/rquote-example.png)
 /// caption
 A screenshot of `/rquote` with the embed `title` highlighted by the green box and a randomly selected dialogue option highlighted in the red box.
 ///

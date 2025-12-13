@@ -1,3 +1,5 @@
+# IsThereAnyDeal game deals handler class
+
 This class is named `ItadGameDealsHandler` and is stored at `classes/itad_get_deals_handler.py`.
 
 The class object itself accepts an argument of `deals_list`; a Python list of internal ITAD game UUIDs to search for deals on.

@@ -1,3 +1,5 @@
+# IsThereAnyDeal game search handler class
+
 This class is named `ItadGameSearchHandler` and is stored at `classes/itad_get_games_handler.py`.
 
 The class object itself accepts an argument of `title`; a string value representing a title to query the IsThereAnyDeal API for.
@@ -40,4 +42,3 @@ This method returns a Python list of the publishers for the video game produced 
 This method accepts no arguements.
 
 This method returns a Python list of the video game genre and content tags produced by the API.
-

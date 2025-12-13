@@ -33,9 +33,9 @@ The configuration for EnduraBot takes place in 3 files.
 | `bibleq_min_of_day`       | The minute of the `bibleq_hour_of_day` hour that the daily bible quote should be sent. |
 | `log_new_day_hour_utc`       | The hour of the day in UTC that a new log-date header should be generated.[^1] |
 | `edc_ports`       | A list of key value pairs where the `key` is the name of a service that EDC's infrastructure is providing and the `value` is the port number to access the service.  |
-| `mod_editable_roles`       | A list of key value pairs where the `key` is the name of a role and the `value` is the role's Discord ID.  |
-| `blacklisted_itad_shops`       | A list of key value pairs where the `key` is the name of a shop that sells games and the `value` is the ITAD internal ID for the shop.[^2]  |
-| `rquote_themes`       | A list of dedicated JSON objects that define the various themes `/rquote` uses. |
+| `mod_editable_roles`       | A list of key value pairs where the `key` is the name of a role and the `value` is the role's Discord ID.[^2]  |
+| `blacklisted_itad_shops`       | A list of key value pairs where the `key` is the name of a shop that sells games and the `value` is the ITAD internal ID for the shop.[^3]  |
+| `rquote_themes`       | A list of dedicated JSON objects that define the various themes `/rquote` uses. See: [Random Quote (/rquote)](rquote-breakdown.md#theme-creation) |
 
 ## Permissions
 As of version `2.1` EnduraBot centralized it's permissions checking to the contents of `data/permissions.json`.
@@ -81,8 +81,9 @@ Certain functions of EnduraBot rely on lists of string values in order to functi
 | `server_identifiers`       | Used in conjunction with the `issue_identifiers` JSON list in this same file. If any word in this list *and* any word in the `issue_identifiers` list is found in a message that pings `sysop_role_id`, the message will be deleted and replaced with an embed asking the user to use `/alert`.  |
 | `issue_identifiers`       | Used in conjunction with the `server_identifiers` JSON list in this same file. If any word in this list *and* any word in the `server_identifiers` list is found in a message that pings `sysop_role_id`, the message will be deleted and replaced with an embed asking the user to use `/alert`.  |
 | `bot_insults`       | List of insults the bot will use if the `bot_insult_chance` is met or exceeded when someone pings it.  |
-| `ooc_XXX`       | List of available opening statements for the configured `/rquote` themes.  |
+| `ooc_XXX`       | List of available opening statements for the configured `/rquote` themes. See: [Random Quote (/rquote)](rquote-breakdown.md#theme-creation) |
 
 
 [^1]: This is primarily used for readability; to ensure that logs are seperated by the day the logged item ocurred. These headers look like this: `--- Sunday, December 07, 2025 (20251207) | 21:28 ---`
-[^2]: Shop IDs can be found by reviewing EnduraBot's logs for any successful game lookup.
+[^2]: The first key value pair will be the role that `/trole` defaults to if it's `role` argument is not populated.
+[^3]: Shop IDs can be found by reviewing EnduraBot's logs for any successful game lookup.

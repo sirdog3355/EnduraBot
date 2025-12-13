@@ -1,3 +1,5 @@
+# Random quote handler class
+
 This class is named `RquoteUsed` and is stored at `classes/db_rquote_used_handler.py`.
 
 When initiated a connection to the `endurabot.db` database is made and, if the table does not already exist, the `rquote_used` table is created.
