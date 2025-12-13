@@ -18,17 +18,17 @@ To get the ID for something you will typically right-click on it and select the 
 
 ## Bot setup and invitation
 !!! warning
-    It is best practice to *not* give bots the `Administrator` permission unless it is *needed* and you trust the bot. Strictly speaking, EnduraBot should not *need* it, but because EnduraBot is developed for a single low-risk Discord server, effort was not put into responsibly limiting it's required permissions.
+    It is best practice to *not* give bots the `Administrator` permission unless it is *needed* and you trust the bot. Strictly speaking, EnduraBot should not *need* it, but because EnduraBot is developed for a specific single low-traffic Discord server, effort was not put into responsibly limiting it's required permissions.
 
 Before we do anything with EnduraBot's code you'll need a bot application through the [Discord developer portal](https://discord.com/developers/applications) in order to allow the bot to join a server.
 
-Once at the portal click `New Application`, give the bot a name (presumably you'll name it `EnduraBot`), agree to the *Developer Terms of Service* and *Developer Policy*, then click `Create`. On the new screen retype the bot's name and optionally provide an avatar.[^1]
+Once at the portal click `New Application`, give the bot a name (presumably you'll name it `EnduraBot`), agree to the *Developer Terms of Service* and *Developer Policy*, then click `Create`. On the new screen retype the bot's name and optionally provide an avatar.
 
 Now, navigate to the `Bot` tab located on the left of the screen. Scroll down and enable the `Presence Intent`, `Server Members Intent`, and `Message Content Intent`. Then, scroll back up and click `Reset Token`.
 
-Once you confirm you wish to reset the token you should see a long string of letters and numbers appear. This is the bot token mentioned in the [requirements](#requirements) section. Hold onto it and store it in a secure place on your computer (such as a dedicated [password manager](https://en.wikipedia.org/wiki/Password_manager)).
+Once you confirm you wish to reset the token[^1] you should see a long string of letters and numbers appear. This is the bot token mentioned in the [requirements](#requirements) section. Hold onto it and store it in a secure place on your computer (such as a dedicated [password manager](https://en.wikipedia.org/wiki/Password_manager)).
 
-Next, go to the `OAuth2` tab. Scroll down to the `OAuth2 URL Generator` box and select the following:
+Next, go to the `OAuth2` tab located on the left of the screen. Scroll down to the `OAuth2 URL Generator` box and select the following:
 
 - `bot`
 - `applications.commands`
@@ -41,7 +41,7 @@ At the very bottom you will have a `Generated URL`. Ensure the option above it i
 !!! warning
     Per the MIT license it is *your* responsibility to ensure that your use of the IsThereAnyDeal API is in-line with their [API terms of service](https://docs.isthereanydeal.com/#section/Terms-of-Service).
 
-In order to access the IsThereAnyDeal API an API token needs to be obtained. This is quite simple.
+In order to access the IsThereAnyDeal API an access token needs to be obtained. This is quite simple.
 
 1. Navigate to [https://isthereanydeal.com/apps/](https://isthereanydeal.com/apps/).
 2. Click `Sign in to register an app`.
@@ -56,13 +56,12 @@ Navigate in a terminal to the directory you desire to house EnduraBot's code. It
 ``` sh
 git clone https://github.com/sirdog3355/EnduraBot.git
 ```
-Note that this will create a directory called `EnduraBot` *inside* of the directory you run this in.
 
 ## Local setup
 
 ### Environment variables
 !!! danger
-    Your real `.env` file should *never* leave your machine and/or wherever EnduraBot is being hosted. It absolutely should *not* be committed to any Git repository; especially a remote one. It's highly advised you add this to your global Git ignore file.
+    The purpose of a `.env` file is to safely store and access sensitive credentials rather than hard code them. This file should never be committed to any kind of repository. It should only ever be on your own machine and on the machine hosting the bot.
 
 Take `.env-example`, copy it into the directory that houses `main.py`, then rename it to `.env`. This expects a couple of variables:
 
@@ -85,9 +84,9 @@ When done you should see the following structure:
 |── cogs/
 |── data/
 |── listeners/
-|── mkdocs/
 |── tasks/
-|── utils
+|── utils/
+|── zensical/
 |── .env
 |── .env-example
 |── .gitignore
@@ -144,10 +143,10 @@ For EnduraBot to function properly the following variables in `variables.json` n
 ```
 
 1. Channel with out of context messages; used by the `/rquote` and the daily bible quote task.
-2. Channel where EDC systems operators chat; used primarily by `/alert`.
+2. Channel where EDC systems operators chat; used primarily by `/alert` and `/estop`.
 3. Channel where daily bible quotes and temporary role notifications are sent.
-4. Role that represents a member that runs technical stuff for the community. Is the role pinged by `/alert` and is used as an exemption criteria for the `alert_detection.py` listener.
-5. Role that represents a server moderator. Used for various functions that require determining if a user is staff.
+4. Role that represents a member that runs technical stuff for the community. It's the role pinged by `/alert` and is used as an exemption criteria for the `alert_detection.py` listener.
+5. Role that represents a server moderator.
 6. List of role IDs that bypass the `/rquote` cooldown.
 
 !!! note
@@ -181,9 +180,9 @@ Simply create a directory called `logs` in the same directory as `main.py`. This
 |── data/
 |── listeners/
 |── logs/
-|── mkdocs/
 |── tasks/
 |── utils/
+|── zensical/
 |── .env
 |── .env-example
 |── .gitignore
@@ -197,9 +196,9 @@ Simply create a directory called `logs` in the same directory as `main.py`. This
 
 ## Python dependencies
 !!! info
-    You may wish to install these dependencies in a [virtualized environment](https://docs.python.org/3/library/venv.html) rather than your master Python environment. If you choose to do this, and you have not already, it may be worth adding `venv` to your global Git ignore file.
+    It is best practice in Python development to install dependencies in a [virtualized environment](https://docs.python.org/3/library/venv.html) rather than your global environment. If you choose to do this, and you have not already, it may be worth adding `venv` to your global Git ignore file.
 
-There are Python specific dependencies required for EnduraBot to run. You may install them by running the following from within the directory housing the text file:
+There are Python specific dependencies required for EnduraBot to run. You may install them by running the following from within the directory housing `requirements.txt`:
 ``` sh
 pip install -r requirements.txt
 ```
@@ -225,7 +224,7 @@ You should see something like this:
 Once you see the highlighted line the bot is functioning and ready to go. It may sometimes take awhile for commands to sync; they will typically still work before the highlighted line appears but unexpected behavior may occur.
 
 ## SQLITE
-EnduraBot utilizes a SQLITE database to hold information that must persist reboots. This will be created automatically once the bot runs for the first time. As a result, the *final* directory structure after a successful boot up of the bot will be the following:
+EnduraBot utilizes a SQLITE database to hold persistent information. This will be created automatically once the bot runs for the first time. As a result, the *final* directory structure after a successful boot up of the bot will be the following:
 
 ``` hl_lines="15"
 .
@@ -234,9 +233,9 @@ EnduraBot utilizes a SQLITE database to hold information that must persist reboo
 |── data/
 |── listeners/
 |── logs/
-|── mkdocs/
 |── tasks/
 |── utils/
+|── zensical/
 |── .env
 |── .env-example
 |── .gitignore
@@ -250,7 +249,12 @@ EnduraBot utilizes a SQLITE database to hold information that must persist reboo
 ```
 
 ## About Docker
-The live bot that runs for EDC is hosted in a Docker container on the community's infrastructure. `docker-compose.yml` and `Dockerfile` are used for this purpose. You are, per the license, free to use these files to do this yourself.  I simply do not feel confident documenting how to do so (nor am I interested in maintaining such documentation).
+The live bot that runs for EDC is hosted in a Docker container on the community's infrastructure. `docker-compose.yml` and `Dockerfile` are used for this purpose. You are, per the license, free to use these files to do this yourself. You will need to adjust them, though.  
+
+I do not feel confident documenting how to do so (nor am I interested in maintaining such documentation).
 
 
-[^1]: You can use the image located at `zensical/docs/images/EnduraBot_Logo.png` in the EnduraBot repository if you would like.
+[^1]: Resetting the bot token on a new application is standard practice. Discord, as as a security measure, does not allow reviewing active tokens; you can only generate new ones. Thus, since the initial one is not provided, you have to reset it. This has no bearing on anything given the initially created token is never used.
+
+
+*[SaaS]: Software as a service

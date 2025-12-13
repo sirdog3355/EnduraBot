@@ -27,12 +27,29 @@ The Discord slash command interface listing command arguments.
 This section will go over any quirks commands may have that cannot be reasonably explained in the Discord interface.
 
 ### **/trole**
+!!! info
+    A dedicated breakdown of this command is available at [Temporary Role Breakdown (/trole)](trole-breakdown.md).
+
 Using this command on someone who doesn't already have a `/trole` entry is self-explanatory. The quirk in this case is what happens if the command is ran on someone who *already has* a `/trole` entry.
 
 `/trole` will treat targetting the same person twice as the executor wishing to *overwrite* the previous entry with an *entirely new one*.
 
 !!! example
-    If Fleff gives someone `@L` for 2 days, and then runs it again on the same person to give `@Roach Cock` for 7 days, EnduraBot will *replace* `@L` with `@Roach Cock` and then *replace* the 2 day timer with a 7 day timer.
+    If John Doe gives someone `@Role A` for 2 days, and then runs it again on the same person to give `@Role B` for 7 days, EnduraBot will *replace* `@Role A` with `@Role B` and then *replace* the 2 day timer with a 7 day timer.
+
+Furthermore, if a temporary role assigned to a user is removed in an abnormal fashion (e.g manually with native Discord permissions), `/trole` will handle it gracefully and still delete the entry in the database at the designated time. However, it is advised that the `remove` arguement of `/trole` be used instead.
+
+### **/rquote**
+!!! info
+    A dedicated breakdown of this command is available at [Random Quote Breakdown (/rquote)](rquote-breakdown.md).
+
+This command relies on the configured channel `out_of_context_channel_id` from [`data/variables.json`](configuration.md#variables) having *all* quotes be in the format of:
+
+```
+"Lorem ipsum"
+```
+
+Any message in the channel that does not follow the above format will *never* be picked. Furthermore, if a selected message has more than 2 attachments, only the first attachment will be used.
 
 ## Non-command Features
 EnduraBot does the following actions which are not triggered by command.
@@ -43,5 +60,5 @@ EnduraBot does the following actions which are not triggered by command.
 - Tracks anytime itself is pinged (including `@everyone`) and has a chance to insult the pinger.
 - Tracks anytime someone pings `@SYS:OP` and, if certain words exist in the message, the message is deleted and the user advised to use `/alert` instead.
 - Tracks Discord accounts joining the server and, if the account is being monitored by `/monitor`, will either send an alert to moderators, or send an alert and ban the account, depending on the settings selected in `/monitor`.
-- Executes `/rquote` to configured channel `based_chat_channel_id` from [`data/variables.json`](configuration.md#variables) with a customized "Bible quote" theme, sent daily at 12pm Eastern time.
+- Executes `/rquote` to configured channel `based_chat_channel_id` from [`data/variables.json`](configuration.md#variables), with a customized "Bible quote" theme, sent daily at 12pm Eastern.
 - Checks every minute if anyone with a temporary role from `/trole` should still have it and, if not, removes the role.

@@ -5,7 +5,7 @@
 ## Theme creation
 A *theme* refers to the fictional scenarios available for EnduraBot to select from. One might be a member of HR expressing concern during a 1-on-1, while another might be aliens freaking out over how weird humans are.
 
-Prior to `v2.0` themes were hard coded at `cogs/rquote.py`. Now, themes can be made by editing EnduraBot's configuration files.
+Prior to `2.0` themes were hard coded at `cogs/rquote.py`. Now, themes can be made by editing EnduraBot's configuration files.
 
 The creation of a theme is a combination of *setting the embed configuration at [`data/variables.json`](configuration.md#variables)* and *setting the dialogue at [`data/misc_text.json`](configuration.md#miscellaneous-text)*.
 
@@ -50,7 +50,6 @@ When `/rquote` is run a theme is chosen at random amongst the themes set forth a
 The green box above is the `title` set at `variables.json`. The red box is a selected dialogue option as demonstrated in the above code-block.
 
 There are no limits to the amount of dialogue that can exist per theme. Dialogue, like themes, are chosen randomly.
-
 
 ## Logic breakdown
 Below is an abbreviated breakdown of how `/rquote` works programmatically.

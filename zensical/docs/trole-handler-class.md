@@ -21,7 +21,7 @@ This method accepts the following arguements:
 - `role_id`: The ID of the role given to the target.
 - `timestamp`: The timestamp for when the temporary role should be removed.
 
-This method will add an entry of the target being given a temporary role.
+This method will first check if `target_id` already exists in the table. If so, said row is deleted. It then adds an entry of the target being given a temporary role.
 
 ### remove_user_by_timestamp()
 This method accepts the following arguements:

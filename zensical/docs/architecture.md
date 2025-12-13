@@ -7,7 +7,7 @@ EnduraBot's code is organized as follows:
 | `data` | Contains configuration files. |
 | `listeners` | Contains files that perform actions based on "listening" to various Discord API triggers (e.g `on_message`). |
 | `logs` | Contains EnduraBot's logs. |
-| `mkdocs` | Contains the raw content of EnduraBot's documentation. |
+| `zensical` | Contains the raw content of EnduraBot's documentation. |
 | `tasks` | Contains files that perform actions at set times or in set intervals. |
 | `utils` | Contains files that provide utilities to EnduraBot's functioning. |
 
@@ -43,8 +43,8 @@ See: [Configuration](configuration.md)
 | `endurabot.log` | Houses the logs for EnduraBot. |
 | `endurabot_debug.log` | Houses the logs with the `DEBUG` level; seperated from `endurabot.log` as they are quite verbose. |
 
-## Mkdocs
-Explaining these files is out of scope. See the documentation for [Mkdocs Material](https://squidfunk.github.io/mkdocs-material) if interested.
+## Zensical
+Explaining these files is out of scope. See the documentation for [Zensical](https://zensical.org/docs) if interested.
 
 ## Tasks
 | File      | Purpose                          |
