@@ -83,7 +83,7 @@ class rquote(commands.Cog):
             if not msg.author.bot
             and ( 
                 (msg.content and (
-                    re.search(r'''["](.+?)["]''', msg.content)
+                    re.search(rf'''{SETTINGS_DATA["rquote_regex"]}''', msg.content)
                 ))
             )
             and (
@@ -95,7 +95,7 @@ class rquote(commands.Cog):
 
         dupe_blocker.add_msg(f"{selected_msg.id}")
 
-        all_matches = re.findall(r'''["](.+?)["]''', selected_msg.content)
+        all_matches = re.findall(rf'''{SETTINGS_DATA["rquote_regex"]}''', selected_msg.content)
         extracted_quote = '"\n"'.join(match.strip() for match in all_matches)
         formatted_quote = f'"{extracted_quote}"'
 
@@ -154,7 +154,7 @@ class rquote(commands.Cog):
         # -- Phase 2: Get message in formatted form just like /rquote --
         
         selected_msg = await channel.fetch_message(int(message_id))
-        all_matches = re.findall(r'''["](.+?)["]''', selected_msg.content)
+        all_matches = re.findall(rf'''{SETTINGS_DATA["rquote_regex"]}''', selected_msg.content)
         extracted_quote = '"\n"'.join(match.strip() for match in all_matches)
         formatted_quote = f'"{extracted_quote}"'
 

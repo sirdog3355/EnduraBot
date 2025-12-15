@@ -30,6 +30,7 @@
     "bibleq_hour_of_day": 1,
     "bibleq_min_of_day": 0,
     "log_new_day_hour_utc": 0,
+    "rquote_regex": "[\"](.+?)[\"]",
     "edc_ports": {
         "Dummy Game Alpha": 1234,
         "Dummy Game Beta": 5678,
