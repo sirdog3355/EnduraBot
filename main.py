@@ -11,7 +11,7 @@ from discord.ext import commands
 # Setup logging
 import utils.logging_setup as logging_setup
 from utils.logging_setup import UNAUTHORIZED
-from utils.config_loader import PERMS_DATA
+from utils.config_loader import PERMS_DATA, SETTINGS_DATA
 from classes.db_blacklist_handler import DBBlacklist
 logger = logging_setup.configure_logging()
 
@@ -100,7 +100,6 @@ async def on_app_command_error(interaction: discord.Interaction, error: app_comm
         return
     
     if isinstance(error, app_commands.CheckFailure):
-
             
         if db.check_status(interaction.user.id):
 
@@ -114,6 +113,18 @@ async def on_app_command_error(interaction: discord.Interaction, error: app_comm
             await interaction.response.send_message(embed=embed, ephemeral=True)
             return
 
+        elif interaction.command.name in SETTINGS_DATA["disabled_cmds"]:
+
+            logger.log(UNAUTHORIZED, f"{interaction.user.name} ({interaction.user.id}) attempted to run disabled command /{interaction.command.name}.")
+
+            embed = discord.Embed(
+                title=":gear: Command disabled.",
+                description=f"Command `/{interaction.command.name}` has been disabled.",
+                color=8650752
+            )
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+            return
+        
         else:
 
             logger.log(UNAUTHORIZED, f"{interaction.user.name} ({interaction.user.id}) attempted to run /{interaction.command.name}.")

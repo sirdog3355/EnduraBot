@@ -1,6 +1,6 @@
 import discord
 import logging
-from utils.config_loader import PERMS_DATA
+from utils.config_loader import PERMS_DATA, SETTINGS_DATA
 from classes.db_blacklist_handler import DBBlacklist
 
 logger = logging.getLogger('endurabot.' + __name__)
@@ -11,9 +11,14 @@ async def check_permissions(interaction: discord.Interaction):
     cmd = interaction.command.name
     eligible_role_ids = PERMS_DATA.get(cmd, [])
 
+    # If user is blacklisted, reject.
     if db.check_status(interaction.user.id) == True:
         return False
 
+    # If command is disabled, reject.
+    if interaction.command.name in SETTINGS_DATA["disabled_cmds"]:
+        return False
+    
     # If no IDs exist, then the command doesn't have a restriction.
     if not eligible_role_ids:
         return True
@@ -28,6 +33,7 @@ async def check_permissions(interaction: discord.Interaction):
 
     if set(eligible_roles_objects).intersection(user_roles):
         return True
+    # If user has the native Discord administrator permission, regardless of their roles, permit command use.
     elif not set(eligible_roles_objects).intersection(user_roles) and interaction.user.guild_permissions.administrator:
         logger.debug(f"Administrator {interaction.user.name} ({interaction.user.id}) bypassed traditional restrictions for command /{interaction.command.name}.")
         return True
