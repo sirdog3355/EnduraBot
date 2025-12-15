@@ -11,8 +11,11 @@ import logging
 from utils.config_loader import SETTINGS_DATA
 from utils.logging_setup import UNAUTHORIZED
 from utils.permissions_checker import check_permissions
+from classes.db_trole_handler import DBTempRole
 
 logger = logging.getLogger('endurabot.' + __name__)
+
+db_temp_role = DBTempRole()
 
 GUILD_ID = int(os.getenv('guild'))
 
@@ -44,6 +47,14 @@ class manage_role(commands.Cog):
 
         # And now we make it an integer for the "get_role" method.
         role = interaction.guild.get_role(int(options.value))
+
+        # Do not mess with the datatype declarations below. They are necessary due to how the SQLITE table is setup.
+        if db_temp_role.check_status(str(user.id)) and int(db_temp_role.get_role(str(user.id))) == int(options.value):
+
+            if discord.utils.get(interaction.guild.roles, id=int(db_temp_role.get_role(str(user.id)))) in user.roles:
+                await interaction.response.send_message(f"<@{user.id}> was given <@&{options.value}> as a **temporary role** via `/trole`. If you would like to remove it, please use the `remove` arguement of `/trole` instead.", ephemeral=True)
+                logger.log(UNAUTHORIZED, f"{interaction.user.name} ({interaction.user.id}) attempted to remove temporary role {options.name} from {user.name} ({user.id}) via /editrole.")
+                return
 
         # Change roles.
         if role in user.roles:
