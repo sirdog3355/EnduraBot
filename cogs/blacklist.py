@@ -51,8 +51,6 @@ class blacklist(commands.Cog):
     @app_commands.guilds(GUILD_ID)
     async def blacklist(self, interaction: discord.Interaction, options: app_commands.Choice[str], user: discord.Member):
 
-        
-        guild_admin_role = discord.utils.get(interaction.guild.roles, id=self.settings_data.get("admin_role_id"))
         guild_mod_role = discord.utils.get(interaction.guild.roles, id=self.settings_data.get("mod_role_id"))
         
         if options.value == "add":
@@ -62,7 +60,7 @@ class blacklist(commands.Cog):
                 logger.log(BLACKLIST, f"{interaction.user.name} ({interaction.user.id}) attempted to blacklist bot {user.name} ({user.id}).")
                 return
 
-            if guild_admin_role in user.roles or guild_mod_role in user.roles:
+            if user.guild_permissions.administrator or guild_mod_role in user.roles:
                 await interaction.response.send_message(f"Staff may not be blacklisted. If they warrant blacklisting they should not be staff members.", ephemeral=True)
                 logger.log(BLACKLIST, f"{interaction.user.name} ({interaction.user.id}) attempted to blacklist staff member {user.name} ({user.id}).")
                 return
