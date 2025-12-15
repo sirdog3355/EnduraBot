@@ -1,5 +1,6 @@
 {
     "repo": "https://github.com/dummyuser/dummyrepo",
+    "docs": "https://myawesomedocumentationsite.org",
     "version": "2.0-beta",
     "out_of_context_channel_id": 9876543210987654321,
     "alert_channel_id": 1234567890123456789,

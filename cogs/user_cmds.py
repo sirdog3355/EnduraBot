@@ -33,7 +33,7 @@ class user_cmds(commands.Cog):
                 roles=True
             )
 
-    # --- COMMAND: /user ---
+# --- COMMAND: /user ---
 
     @app_commands.command(name="user", description="Get information on a server member.")
     @app_commands.check(check_permissions)
@@ -74,7 +74,7 @@ class user_cmds(commands.Cog):
         await interaction.response.send_message(embed=embed, ephemeral=True)
         logger.info(f"{interaction.user.name} ({interaction.user.id}) ran /user on {user.name} ({user.id}).")
 
-    # --- COMMAND: /about ---
+# --- COMMAND: /about ---
 
     @app_commands.command(name="about", description="Get information about EnduraBot.")
     @app_commands.check(check_permissions)
@@ -83,6 +83,7 @@ class user_cmds(commands.Cog):
 
         repo = self.settings_data.get("repo")
         version = self.settings_data.get("version")
+        docs = self.settings_data.get("docs")
 
         embed = discord.Embed(
             title="About me",
@@ -92,12 +93,13 @@ class user_cmds(commands.Cog):
         embed.set_thumbnail(url=self.bot.user.display_avatar.url)
         embed.add_field(name="Version", value=version, inline=False)
         embed.add_field(name="GitHub Repository", value=repo, inline=False)
+        embed.add_field(name="Documentation", value=docs, inline=False)
         embed.add_field(name="Uptime", value=f"<t:{self.bot.initial_start_time}:R>")
 
         await interaction.response.send_message(embed=embed)
         logger.info(f"{interaction.user.name} ({interaction.user.id}) ran /about in #{interaction.channel.name} ({interaction.channel.id}).")
 
-    # --- COMMAND: /alert ---
+# --- COMMAND: /alert ---
 
     @app_commands.command(name="alert", description="Submit a pinged alert to systems operators of a service being down.")
     @app_commands.check(check_permissions)
@@ -118,7 +120,7 @@ class user_cmds(commands.Cog):
 
         logger.critical(f"{interaction.user.name} ({interaction.user.id}) submitted an alert to systems operators with the context: [{desc}].")
 
-    # --- COMMAND: /estop ---
+# --- COMMAND: /estop ---
 
     @app_commands.command(name="estop", description="Perform an emergency shutdown of EnduraBot.")
     @app_commands.check(check_permissions)
