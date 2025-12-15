@@ -14,6 +14,7 @@ from utils.logging_setup import COOLDOWN
 from utils.permissions_checker import check_permissions
 from classes.itad_get_games_handler import ItadGameSearchHandler
 from classes.itad_get_deals_handler import ItadGameDealsHandler
+from classes.custom_exceptions import APIConnectionError, APIContentNotFoundError
 
 logger = logging.getLogger('endurabot.' + __name__)
 
@@ -45,7 +46,7 @@ class game_cmd(commands.Cog):
     async def game(self, interaction: discord.Interaction, title: str, private: bool = False):
 
         itad_name = "[IsThereAnyDeal](https://isthereanydeal.com/)"
-        
+    
         if private == False:
             await interaction.response.defer(ephemeral=False)
             hide_state = False
@@ -53,33 +54,30 @@ class game_cmd(commands.Cog):
             await interaction.response.defer(ephemeral=True)
             hide_state = True
 
-        api_rejected_embed = discord.Embed(
-            title=":no_entry: API Key Rejected",
-            description=f"{itad_name} has rejected EnduraBot's access to it's data due to an API key issue.\n\n Please notify a <@&{SETTINGS_DATA["sysop_role_id"]}> for investigation.",
+        try:
+            searched_game = ItadGameSearchHandler(title)
+        except APIConnectionError as e:
+
+            api_error_embed = discord.Embed(
+            title=":no_entry: API Error",
+            description=f"{itad_name} has had an API error: `{e}` \n\n Please notify a <@&{SETTINGS_DATA["sysop_role_id"]}> for investigation.",
             color=8650752
         )
 
-        no_results_embed = discord.Embed(
+            await interaction.followup.send(embed=api_error_embed)
+            logger.error(f"{interaction.user} ({interaction.user.id}) ran /game but IsThereAnyDeal's API had an error: [{e}].")
+            return
+        
+        except APIContentNotFoundError as e:
+            
+            no_results_embed = discord.Embed(
             title=":wastebasket: No Results",
             description=f"{itad_name} could not find a game with title `{title}`. Please try again.",
             color=discord.Color.purple()
         )
-
-        not_status_200_embed = discord.Embed(
-            title=f":broken_chain: API Endpoint Error",
-            description=f"The API endpoint for receiving price information has returned a status code indicating that it is down or has issues.\n\n Please notify a <@&{SETTINGS_DATA["sysop_role_id"]}> for investigation, though odds are the issue lies with {itad_name}.",
-            color=discord.Color.purple()
-        )
-
-        try:
-            searched_game = ItadGameSearchHandler(title)
-        except TypeError:
-            await interaction.followup.send(embed=api_rejected_embed, ephemeral=True)
-            logger.critical(f"{interaction.user} ({interaction.user.id}) ran /game but IsThereAnyDeal is rejecting EnduraBot's API key at endpoint [/games/lookup/v1]. Hide: [{hide_state}]")
-            return
-        except ValueError:
-            await interaction.followup.send(embed=no_results_embed, ephemeral=True)
-            logger.error(f"{interaction.user} ({interaction.user.id}) ran /game searching for [{title}] and the API returned no results. Hide: [{hide_state}]")
+            
+            await interaction.followup.send(embed=no_results_embed)
+            logger.error(f"{interaction.user} ({interaction.user.id}) ran /game searching for [{title}] and the API returned no results. Error: [{e}] Hide: [{hide_state}]")
             return
         
         game_title = searched_game.get_title()
@@ -94,13 +92,27 @@ class game_cmd(commands.Cog):
 
         try:
             game_deals = ItadGameDealsHandler(games_to_get_deals)
-        except TypeError:    
-            await interaction.followup.send(embed=api_rejected_embed, ephemeral=True)
-            logger.critical(f"{interaction.user} ({interaction.user.id}) ran /game but IsThereAnyDeal is rejecting EnduraBot's API key at endpoint [/games/prices/v3]. Hide: [{hide_state}]")
+        except APIConnectionError as e:   
+
+            api_error_embed = discord.Embed(
+            title=":no_entry: API Error",
+            description=f"{itad_name} has had an API error: `{e}` \n\n Please notify a <@&{SETTINGS_DATA["sysop_role_id"]}> for investigation.",
+            color=8650752
+        )
+
+            await interaction.followup.send(embed=api_error_embed)
+            logger.error(f"{interaction.user} ({interaction.user.id}) ran /game but IsThereAnyDeal's API had an error: [{e}].")
             return
-        except ValueError:
-            await interaction.followup.send(embed=not_status_200_embed, ephemeral=True)
-            logger.error(f"{interaction.user} ({interaction.user.id}) ran /game but IsThereAnyDeal did not return a status code 200 at endpoint [/games/prices/v3]. Hide: [{hide_state}]")
+        except APIContentNotFoundError as e:
+            
+            no_results_abnormal = discord.Embed(
+            title=":interrobang: No Price or Deal Information Found",
+            description=f"{itad_name} could not find *any* prices or deals for `{title}`. This is highly unusual given IsThereAnyDeal's purpose. \n\n Please notify a <@&{SETTINGS_DATA["sysop_role_id"]}> for investigation.",
+            color=discord.Color.purple()
+        )
+
+            await interaction.followup.send(embed=no_results_abnormal)
+            logger.error(f"{interaction.user} ({interaction.user.id}) ran /game but IsThereAnyDeal did not return ANY price or deal information for {title} (UUID: {game_uuid}). Error: [{e}] Hide: [{hide_state}]")
             return
 
         deal = game_deals.get_deals()[0]
