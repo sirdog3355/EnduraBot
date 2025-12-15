@@ -14,3 +14,4 @@ services:
     - /home/sirdog/endurabot/data:/app/data
     - /home/sirdog/endurabot/logs:/app/logs
     - /home/sirdog/endurabot/endurabot.db:/app/endurabot.db
+    - /home/sirdog/endurabot/.env:/app/.env

@@ -7,7 +7,6 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY main.py .
-COPY .env .
 COPY utils/ utils/
 COPY classes/ classes/
 COPY cogs/ cogs/
