@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
-from itertools import islice
 from utils.config_loader import SETTINGS_DATA
+from classes.custom_exceptions import APIConnectionError, APIContentNotFoundError
 
 load_dotenv()
 
@@ -16,33 +16,20 @@ class ItadGameDealsHandler():
 
         deals_url = "https://api.isthereanydeal.com/games/prices/v3"
         deals_header = {'key': API_TOKEN}
-
         response = requests.post(deals_url, params=deals_header, json=deals_list)
 
-        if self.check_connection() == False:
-            raise TypeError("API token missing or invalid.")
+        prices_data = response.json()
 
-        if response.status_code == 200:
-            deals = response.json()
-        else:
-            raise ValueError("Invalid input.")
+        if not prices_data:
+            raise APIContentNotFoundError("Endpoint [/games/prices/v3] returned nothing at all when passed UUIDs.")
 
-        self.deals = deals
+        if "status_code" in prices_data and prices_data["status_code"] == 403:
+            raise APIConnectionError(f"Endpoint [/games/prices/v3] has rejected EnduraBot's API key.")
+        elif "status_code" in prices_data:
+            raise APIConnectionError(f"Endpoint [/games/prices/v3] returned status code {prices_data["status_code"]} rather than content.")
+        
+        self.deals = prices_data
         self.list_of_ids = deals_list
-
-    def check_connection(self):
-        url = "https://api.isthereanydeal.com/games/prices/v3"
-        deals_header = {'key': API_TOKEN}
-
-        response = requests.post(url, params=deals_header, json=["01945ff9-a71b-72ca-a4a9-c245c58bb561"])
-        data = response.json()
-
-        try:
-            data["status_code"]
-            logger.debug(f"A tested API connection failed.")
-            return False
-        except TypeError:
-            return True
 
     def get_deals(self):
         deals_sorted_by_first_offer_price = sorted(self.deals, key=lambda x: x['deals'][0]['price']['amount'])

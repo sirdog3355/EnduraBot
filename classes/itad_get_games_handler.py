@@ -2,6 +2,8 @@
 import os
 from dotenv import load_dotenv
 
+from classes.custom_exceptions import APIConnectionError, APIContentNotFoundError
+
 load_dotenv()
 
 import requests
@@ -17,15 +19,17 @@ class ItadGameSearchHandler():
         base_name_payload = {'key': API_TOKEN, 'title': title}
         base_payload = requests.get(base_url_by_name, params=base_name_payload)
 
-        if self.check_connection() == False:
-            raise TypeError("API token missing or invalid.")
+        base_data = base_payload.json()
+
+        if not base_data:
+            raise APIContentNotFoundError(f"Endpoint [/games/search/v1] returned nothing when given {title}.")
         
-        if not base_payload.json():
-            raise ValueError("Game not found.")
-
-        base_data = base_payload.json()[0]
-
-        game_id = base_data["id"]
+        if "status_code" in base_data and base_data["status_code"] == 403:
+            raise APIConnectionError("Endpoint [/games/search/v1] has rejected EnduraBot's API key.")
+        elif "status_code" in base_data:
+            raise APIConnectionError(f"Endpoint [/games/search/v1] returned status code {base_data["status_code"]} rather than content.")
+        
+        game_id = base_data[0]["id"]
 
         full_url = "https://api.isthereanydeal.com/games/info/v2"
         full_payload = {'key': API_TOKEN, 'id': game_id}
@@ -34,7 +38,12 @@ class ItadGameSearchHandler():
         full_data = full_response.json()
 
         if not full_data:
-            raise ValueError("Something went wrong.")
+            raise APIContentNotFoundError(f"Endpoint [/games/info/v2] returned nothing for UUID [{game_id}].")
+        
+        if "status_code" in full_data and full_data["status_code"] == 403:
+            raise APIConnectionError("Endpoint [/games/search/v1] has rejected EnduraBot's API key.")
+        elif "status_code" in full_data:
+            raise APIConnectionError(f"Endpoint [/games/search/v1] returned status code {full_data["status_code"]} rather than content.")
         
         try:
             self.boxart = full_data["assets"]["boxart"]
@@ -61,20 +70,6 @@ class ItadGameSearchHandler():
         self.id = full_data["id"]
         self.publishers = publisher_list
         self.tags = tags_list
-
-    def check_connection(self):
-        url = "https://api.isthereanydeal.com/games/lookup/v1"
-        payload = {'key': API_TOKEN, 'title': "Verdun"}
-        request = requests.get(url, params=payload)
-
-        data = request.json()
-
-        try:
-            data["status_code"]
-            logger.debug(f"A tested API connection failed.")
-            return False
-        except KeyError:
-            return True
     
     def get_title(self):
         return self.title
