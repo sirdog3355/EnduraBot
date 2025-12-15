@@ -44,6 +44,9 @@
     "blacklisted_itad_shops": {
         "Fanatical": 6
     },
+    "disabled_cmds": [
+        "YOUR_COMMAND_HERE"
+    ],
     "rquote_themes": {
         "hr": {
             "title": "💼 HR Office of EDC, Inc.",
