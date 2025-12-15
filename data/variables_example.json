@@ -7,7 +7,6 @@
     "invite_alert_channel_id": 2345678901234567890,
     "sysop_role_id": 3456789012345678901,
     "mod_role_id": 4567890123456789012,
-    "admin_role_id": 5678901234567890123,
     "L_role_id": 7890123456789012345,
     "cooldown_exempt_roles": [
         9012345678901234567,

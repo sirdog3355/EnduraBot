@@ -47,20 +47,6 @@ class user_cmds(commands.Cog):
         join_epoch = round(user.joined_at.timestamp()) #Get UNIX timestamp for when member joined the Discord.
         role_ids = [f"<@&{role.id}>" for role in user.roles if role.name != "@everyone"] #Get list of all role IDs the user has, excluding the default @@everyone role.
 
-        guild_sysop_role = discord.utils.get(interaction.guild.roles, id=self.settings_data.get("sysop_role_id"))
-        guild_admin_role = discord.utils.get(interaction.guild.roles, id=self.settings_data.get("admin_role_id"))
-        guild_mod_role = discord.utils.get(interaction.guild.roles, id=self.settings_data.get("mod_role_id"))
-
-        if guild_sysop_role in user.roles:
-            is_sysop = ":white_check_mark:"
-        else:
-            is_sysop= ":x:"
-
-        if guild_admin_role in user.roles or guild_mod_role in user.roles:
-            is_staff = ":white_check_mark:"
-        else:
-            is_staff = ":x:"
-
         if user.bot:
             bot_emoji = ":white_check_mark:"
         else:
@@ -77,8 +63,6 @@ class user_cmds(commands.Cog):
         embed.add_field(name="Global Name", value=user.global_name, inline=False)
         embed.add_field(name="Account Created", value=f"<t:{create_epoch}:f> (<t:{create_epoch}:R>)", inline=False)
         embed.add_field(name="Joined", value=f"<t:{join_epoch}:f> (<t:{join_epoch}:R>)", inline=False)
-        embed.add_field(name="Backend Operator?", value=is_sysop)
-        embed.add_field(name="Server Staff?", value=is_staff)
         embed.add_field(name="Bot?", value=bot_emoji)
         embed.add_field(name="Has Nitro?", value=premium_emoji)
 
