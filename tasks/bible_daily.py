@@ -40,7 +40,7 @@ class bible_daily(commands.Cog):
         msg_table = [
             msg async for msg in ooc_channel.history(limit=75, around=random_date)
             if not msg.author.bot
-            and ( 
+            and (
                 (msg.content and (
                     re.search(r'''["](.+?)["]''', msg.content)
                 ))
@@ -59,12 +59,12 @@ class bible_daily(commands.Cog):
         formatted_quote = f'"{extracted_quote}"'
 
         embed = discord.Embed(
-            title="", 
+            title="",
             description=f"{formatted_quote}\n\n —**{random_gospel}**",
             color=discord.Color.purple()
             )
-        embed.set_footer(text="This quote is not representative of the Endurance Coalition's values.")
-        
+        embed.set_footer(text=SETTINGS_DATA["rquote_footer"])
+
         if selected_msg.attachments:
             embed.set_image(url=selected_msg.attachments[0].url)
 

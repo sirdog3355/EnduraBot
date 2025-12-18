@@ -30,10 +30,10 @@ def custom_cooldown(interaction: discord.Interaction) -> app_commands.Cooldown |
 
     if not cog_instance.exempt_role_ids.isdisjoint(user_role_ids):
         return None
-    
+
     if interaction.channel_id == SETTINGS_DATA["out_of_context_channel_id"]:
         return None
-    
+
     return app_commands.Cooldown(1, cog_instance.cooldown)
 
 class rquote(commands.Cog):
@@ -44,13 +44,13 @@ class rquote(commands.Cog):
         self.cooldown = SETTINGS_DATA["rquote_cooldown_in_seconds"]
         self.themes = SETTINGS_DATA["rquote_themes"]
         self.misc_data = MISC_DATA
-    
+
         self.default_allowed_mentions = AllowedMentions(
                 everyone=False,
-                users=True, 
-                roles=True      
+                users=True,
+                roles=True
             )
-        
+
 
     # --- COMMAND: /rquote ---
 
@@ -61,7 +61,7 @@ class rquote(commands.Cog):
     @app_commands.checks.dynamic_cooldown(custom_cooldown)
 
     async def rquote(self, interaction: discord.Interaction):
-        
+
         ooc_channel_id = self.settings_data.get("out_of_context_channel_id")
         ooc_channel = self.bot.get_channel(ooc_channel_id)
 
@@ -81,7 +81,7 @@ class rquote(commands.Cog):
         msg_table = [
             msg async for msg in ooc_channel.history(limit=75, around=random_date)
             if not msg.author.bot
-            and ( 
+            and (
                 (msg.content and (
                     re.search(rf'''{SETTINGS_DATA["rquote_regex"]}''', msg.content)
                 ))
@@ -105,12 +105,12 @@ class rquote(commands.Cog):
         random_opener = random.choice(self.misc_data[opener_key_from_json])
 
         embed = discord.Embed(
-            title=selected_theme_data["title"], 
+            title=selected_theme_data["title"],
             description=f"{random_opener}\n\n>>> {formatted_quote}",
             color=selected_theme_data["color"]
             )
-        
-        embed.set_footer(text="This scenario is not representative of the Endurance Coalition's values.")
+
+        embed.set_footer(text=SETTINGS_DATA["rquote_footer"])
 
         if selected_msg.attachments:
             has_attachment = True
@@ -119,7 +119,7 @@ class rquote(commands.Cog):
         await interaction.response.send_message(embed=embed)
         logger.info(f"{interaction.user.name} ({interaction.user.id}) generated a random quote in #{interaction.channel.name} ({interaction.channel.id}).")
         logger.debug(f"{interaction.user.name} ({interaction.user.id}) generated a random quote. Channel: [#{interaction.channel.name} ({interaction.channel.id})]. Dated: [{selected_msg.created_at.strftime("%B %d, %Y")}]. Theme: [{selected_theme_data["title"]}]. Opener: [{random_opener}]. Content: [{formatted_quote}]. Attachment: [{has_attachment}].")
-    
+
     @rquote.error
     async def rquote_error(self, interaction: discord.Interaction, error: app_commands.AppCommandError):
         if isinstance(error, app_commands.CommandOnCooldown):
@@ -150,9 +150,9 @@ class rquote(commands.Cog):
             logger.debug(f"{interaction.user.name} ({interaction.user.id}) failed to find message ID ({message_id}) in #{channel.name}.")
             await interaction.response.send_message(f"A message with ID `{message_id}` not found. Note that this command should be run in the channel containing the message.", ephemeral=True)
             return
-        
+
         # -- Phase 2: Get message in formatted form just like /rquote --
-        
+
         selected_msg = await channel.fetch_message(int(message_id))
         all_matches = re.findall(rf'''{SETTINGS_DATA["rquote_regex"]}''', selected_msg.content)
         extracted_quote = '"\n"'.join(match.strip() for match in all_matches)
@@ -196,18 +196,18 @@ class rquote(commands.Cog):
         # -- Phase 4: If message WOULD be selected, execute /rquote as normal but with the debugging embed too
 
         else:
-            
+
             selected_theme_data = self.themes[random.choice(list(self.themes.keys()))]
             opener_key_from_json = selected_theme_data["opener_key"]
             random_opener = random.choice(self.misc_data[opener_key_from_json])
 
             embed1 = discord.Embed(
-                title=selected_theme_data["title"], 
+                title=selected_theme_data["title"],
                 description=f"{random_opener}\n\n>>> {formatted_quote}",
                 color=selected_theme_data["color"]
                 )
-            
-            embed1.set_footer(text="This scenario is not representative of the Endurance Coalition's values.")
+
+            embed1.set_footer(text=SETTINGS_DATA["rquote_footer"])
 
             embed2 = discord.Embed(
                 title=":information_source: Message Information",
