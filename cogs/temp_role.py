@@ -60,7 +60,7 @@ class temp_role(commands.Cog):
         await interaction.response.defer(ephemeral=True)
 
         role = interaction.guild.get_role(int(roles))
-        general_chat = self.bot.get_channel(SETTINGS_DATA["based_chat_channel_id"])
+        general_chat = self.bot.get_channel(SETTINGS_DATA["general_chat_channel_id"])
         timestamp_equation = datetime.datetime.now() + timedelta(hours=length)
         timestamp = timestamp_equation.replace(microsecond=0)
         timestamp_fancy = timestamp.strftime("%B %d, %Y %H:%M")

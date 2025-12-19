@@ -26,8 +26,8 @@ class bible_daily(commands.Cog):
     async def daily_bible_quote(self):
         await self.bot.wait_until_ready()
 
-        based_chat_channel = self.bot.get_channel(self.settings_data.get("based_chat_channel_id"))
-        ooc_channel = self.bot.get_channel(self.settings_data.get("out_of_context_channel_id"))
+        general_chat_channel = self.bot.get_channel(self.settings_data.get("general_chat_channel_id"))
+        ooc_channel = self.bot.get_channel(self.settings_data.get("quotes_channel_id"))
         random_gospel = random.choice(self.misc_data["bible_gospels"])
         random_opener = random.choice(self.misc_data["daily_bible_openers"])
 
@@ -68,9 +68,9 @@ class bible_daily(commands.Cog):
         if selected_msg.attachments:
             embed.set_image(url=selected_msg.attachments[0].url)
 
-        await based_chat_channel.send(content=f"# ✝️ Bible Quote of the Day\n\n:palms_up_together: {random_opener}", embed=embed)
+        await general_chat_channel.send(content=f"# ✝️ Bible Quote of the Day\n\n:palms_up_together: {random_opener}", embed=embed)
         logger.info("Daily bible quote sent.")
-        logger.debug(f"Daily bible quote sent. Channel: [#{based_chat_channel.name} ({based_chat_channel.id})]. Dated: [{selected_msg.created_at.strftime("%B %d, %Y")}]. Opener: [{random_opener}]. Gospel: [{random_gospel}]. Content: [{formatted_quote}].")
+        logger.debug(f"Daily bible quote sent. Channel: [#{general_chat_channel.name} ({general_chat_channel.id})]. Dated: [{selected_msg.created_at.strftime("%B %d, %Y")}]. Opener: [{random_opener}]. Gospel: [{random_gospel}]. Content: [{formatted_quote}].")
 
     @daily_bible_quote.before_loop
     async def before_daily_bible_quote(self):
