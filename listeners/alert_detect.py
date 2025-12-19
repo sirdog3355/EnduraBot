@@ -39,7 +39,7 @@ class alert_detect(commands.Cog):
             await message.delete()
             embed = discord.Embed(
                 title="⚙️ Having an issue? Use `/alert`!", 
-                description="An **automated filter** has detected that a recent ping was made to systems operators in relation to an issue with EDC services.\n\n The preferred method of reporting a service being down is `/alert`.",
+                description="An **automated filter** has detected that a recent ping was made to systems operators in relation to an issue with community services.\n\n The preferred method of reporting a service being down is `/alert`.",
                 color=8650752
             )
             logger.info(f"{message.author.name} ({message.author.id}) triggered the /alert filter. Content: [{message.content}]")

@@ -31,7 +31,7 @@ def custom_cooldown(interaction: discord.Interaction) -> app_commands.Cooldown |
     if not cog_instance.exempt_role_ids.isdisjoint(user_role_ids):
         return None
 
-    if interaction.channel_id == SETTINGS_DATA["out_of_context_channel_id"]:
+    if interaction.channel_id == SETTINGS_DATA["quotes_channel_id"]:
         return None
 
     return app_commands.Cooldown(1, cog_instance.cooldown)
@@ -62,7 +62,7 @@ class rquote(commands.Cog):
 
     async def rquote(self, interaction: discord.Interaction):
 
-        ooc_channel_id = self.settings_data.get("out_of_context_channel_id")
+        ooc_channel_id = self.settings_data.get("quotes_channel_id")
         ooc_channel = self.bot.get_channel(ooc_channel_id)
 
         has_attachment = False

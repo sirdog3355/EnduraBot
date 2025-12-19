@@ -142,7 +142,7 @@ class user_cmds(commands.Cog):
 
 # --- COMMAND: /info ---
 
-    @app_commands.command(name="info", description="Quick access to EDC relevant information.")
+    @app_commands.command(name="info", description="Quick access to community relevant information.")
     @app_commands.check(check_permissions)
     @app_commands.guilds(GUILD_ID)
     @app_commands.choices(options = [
@@ -156,10 +156,10 @@ class user_cmds(commands.Cog):
 
         if options.value == "links":
 
-            links_list = self.settings_data.get("edc_links", {})
+            links_list = self.settings_data.get("links", {})
 
             embed = discord.Embed(
-                title="Endurance Coalition Links",
+                title=f"{interaction.guild.name} Links",
                 color=discord.Color.purple()
             )
 
@@ -176,13 +176,13 @@ class user_cmds(commands.Cog):
 
         if options.value == "ports":
 
-            ports_list = self.settings_data.get("edc_ports", {})
-            edc_ip = self.settings_data.get("edc_ip")
-            edc_url = self.settings_data.get("edc_url")
+            ports_list = self.settings_data.get("ports", {})
+            ip = self.settings_data.get("ip")
+            url = self.settings_data.get("url")
 
             embed = discord.Embed(
-                title="Endurance Coalition IP Addresses",
-                description=f"Most games should accept `{edc_url}` as our IP address. Just append the port to the end like usual.\n\n If for some reason that does not work, our *raw* IP is `{edc_ip}`.",
+                title=f"{interaction.guild.name} IP Addresses",
+                description=f"Most games should accept `{url}` as our IP address. Just append the port to the end like usual.\n\n If for some reason that does not work, our *raw* IP is `{ip}`.",
                 color=discord.Color.blue()
             )
 

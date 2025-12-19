@@ -35,7 +35,7 @@ class member_monitor(commands.Cog):
 
                 embed = discord.Embed(
                     title=":rotating_light: Member Monitor Triggered",
-                    description=f"""`{name}` ({member.id}) joined the server. Upon inspection the user was found on the `member_monitor` table with the `{level}` level. As a result, they have been banned from EDC preemptively.
+                    description=f"""`{name}` ({member.id}) joined the server. Upon inspection the user was found on the `member_monitor` table with the `{level}` level. As a result, they have been banned from the server preemptively.
                     \n\n <@{mod_id}> added `{name}` to the monitor on <t:{timestamp}:f> with the reason shown below. Please speak with them for further details.
                     \n\n **This individual must be removed from the `member_monitor` table before unbanning**. They will simply be re-banned otherwise.""",
                     color=15086336

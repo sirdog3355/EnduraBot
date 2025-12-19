@@ -2,9 +2,9 @@
     "repo": "https://github.com/dummyuser/dummyrepo",
     "docs": "https://myawesomedocumentationsite.org",
     "version": "2.0-beta",
-    "out_of_context_channel_id": 9876543210987654321,
+    "quotes_channel_id": 9876543210987654321,
     "alert_channel_id": 1234567890123456789,
-    "based_chat_channel_id": 2345678901234567890,
+    "general_chat_channel_id": 2345678901234567890,
     "invite_alert_channel_id": 2345678901234567890,
     "sysop_role_id": 3456789012345678901,
     "mod_role_id": 4567890123456789012,
@@ -13,15 +13,15 @@
         9012345678901234567,
         1023456789012345678
     ],
-    "edc_links": {
+    "links": {
         "https://dummygaming.org": "Dummy Gaming Main Site",
         "https://wiki.dummygaming.org": "Dummy Gaming Wiki Archive",
         "https://foundryvtt.dummygaming.org": "Virtual Tabletop for Pretend Adventures",
         "https://127.0.0.1:8080": "Localhost Development Port",
         "https://github.com/dummyuser/dummyrepo": "DummyBot GitHub Source"
     },
-    "edc_ip": "192.168.1.100",
-    "edc_url": "google.com",
+    "ip": "192.168.1.100",
+    "url": "google.com",
     "rquote_cooldown_in_seconds": 1800,
     "game_cooldown_in_seconds": 600,
     "game_num_uses_before_cooldown": 5,
@@ -32,7 +32,7 @@
     "bibleq_min_of_day": 0,
     "log_new_day_hour_utc": 0,
     "rquote_regex": "[\"](.+?)[\"]",
-    "edc_ports": {
+    "ports": {
         "Dummy Game Alpha": 1234,
         "Dummy Game Beta": 5678,
         "Dummy Game Gamma": 9012,
