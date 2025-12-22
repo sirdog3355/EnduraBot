@@ -18,6 +18,8 @@ logger = logging.getLogger('endurabot.' + __name__)
 
 GUILD_ID = int(os.getenv('guild'))
 
+vars_used = ["repo", "version", "docs", "alert_channel_id", "sysop_role_id", "links", "ports", "ip", "url", "log_text_exclude"]
+
 class user_cmds(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

@@ -3,3 +3,6 @@ class APIConnectionError(Exception):
 
 class APIContentNotFoundError(Exception):
     pass
+
+class ConfigValidate(Exception):
+    pass
