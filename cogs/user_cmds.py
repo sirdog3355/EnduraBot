@@ -236,17 +236,7 @@ class user_cmds(commands.Cog):
 
         chosen_lines = [
             line for line in reversed(list(open(log_file)))
-                if not re.search(r"Loaded", line)
-                and
-                not re.search(r"^---", line)
-                and
-                not re.search(r"Synced", line)
-                and
-                not re.search(r"Hello, world!", line)
-                and
-                not re.search(r":INFO:discord.client: logging in using static token", line)
-                and 
-                not re.search(r"PyNaCl is not installed", line)
+                if not any(re.search(text, line) for text in SETTINGS_DATA["log_text_exclude"])
         ]
 
         if sum(len(i) for i in chosen_lines[0:lines]) > 4096:
