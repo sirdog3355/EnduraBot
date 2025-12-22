@@ -159,14 +159,14 @@ class user_cmds(commands.Cog):
             links_list = self.settings_data.get("links", {})
 
             embed = discord.Embed(
-                title=f"{interaction.guild.name} Links",
+                title=f":link: {interaction.guild.name} Links",
                 color=discord.Color.purple()
             )
 
             for url, description in links_list.items():
                 embed.add_field(
                     name=description,
-                    value=url,
+                    value=f"[Click me]({url})",
                     inline=False
                 )
 
@@ -181,8 +181,8 @@ class user_cmds(commands.Cog):
             url = self.settings_data.get("url")
 
             embed = discord.Embed(
-                title=f"{interaction.guild.name} IP Addresses",
-                description=f"Most games should accept `{url}` as our IP address. Just append the port to the end like usual.\n\n If for some reason that does not work, our *raw* IP is `{ip}`.",
+                title=f":wireless: {interaction.guild.name} IP Addresses",
+                description=f"Most services should accept `{url}` as our IP address. Just append the port to the end like usual.\n\n If for some reason that does not work, our *raw* IP is `{ip}`.",
                 color=discord.Color.blue()
             )
 
