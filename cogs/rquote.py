@@ -43,6 +43,7 @@ class rquote(commands.Cog):
         self.exempt_role_ids = set(SETTINGS_DATA["cooldown_exempt_roles"])
         self.cooldown = SETTINGS_DATA["rquote_cooldown_in_seconds"]
         self.themes = SETTINGS_DATA["rquote_themes"]
+        self.oldest_quote_date = None
         self.misc_data = MISC_DATA
 
         self.default_allowed_mentions = AllowedMentions(
@@ -72,10 +73,18 @@ class rquote(commands.Cog):
             logger.log(UNAUTHORIZED, f"{interaction.user.name} ({interaction.user.id}) attempted to generate a quote in #{interaction.channel.name}.")
             return
 
-        # Current date - date roughly close to the first quote in #out-of-context
-        num_days = datetime.now(timezone.utc) - datetime(2022, 3, 14, 0, 0, 0, tzinfo=timezone.utc)
+        # Get date of first ever message in the quotes channel
+        if self.oldest_quote_date == None:   
+            oldest_msg = [
+                msg async for msg in ooc_channel.history(oldest_first=True, limit=1)
+            ]
+            
+            self.oldest_quote_date = oldest_msg[0].created_at
 
-        # This selects the random date.
+        # Current date - date roughly close to the first quote in #out-of-context
+        num_days = datetime.now(timezone.utc) - self.oldest_quote_date
+
+        # This selects the random date
         random_date = datetime.now(timezone.utc) - timedelta(days=random.randint(1, num_days.days))
 
         msg_table = [
