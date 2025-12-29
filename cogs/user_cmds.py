@@ -99,47 +99,6 @@ class user_cmds(commands.Cog):
         await interaction.response.send_message(embed=embed)
         logger.info(f"{interaction.user.name} ({interaction.user.id}) ran /about in #{interaction.channel.name} ({interaction.channel.id}).")
 
-# --- COMMAND: /alert ---
-
-    @app_commands.command(name="alert", description="Submit a pinged alert to systems operators of a service being down.")
-    @app_commands.check(check_permissions)
-    @app_commands.guilds(GUILD_ID)
-    @app_commands.describe(
-        desc = "A brief description of the issue. Operators will see this."
-    )
-    async def alert(self, interaction: discord.Interaction, desc: str):
-
-        guild_alert_channel = self.bot.get_channel(self.settings_data.get("alert_channel_id"))
-        sysop_role = interaction.guild.get_role(self.settings_data.get("sysop_role_id"))
-
-        await interaction.response.send_message(content="Your report has been submitted.", ephemeral=True)
-        await guild_alert_channel.send(
-            content=f"# :rotating_light: INCIDENT ALERT :rotating_light:\n\n **Attention**: {sysop_role.mention}\n\n **Reporting User**: {interaction.user.mention} (from <#{interaction.channel.id}>) \n\n **Details**: \"{desc}\" \n\n Systems operator investigation requested! Please post in this channel and notify {interaction.user.mention} when investigation begins.",
-            allowed_mentions=self.default_allowed_mentions
-            )
-
-        logger.critical(f"{interaction.user.name} ({interaction.user.id}) submitted an alert to systems operators with the context: [{desc}].")
-
-# --- COMMAND: /estop ---
-
-    @app_commands.command(name="estop", description="Perform an emergency shutdown of EnduraBot.")
-    @app_commands.check(check_permissions)
-    @app_commands.guilds(GUILD_ID)
-
-    async def estop(self, interaction: discord.Interaction):
-
-        guild_alert_channel = self.bot.get_channel(self.settings_data.get("alert_channel_id"))
-        sysop_role_id = interaction.guild.get_role(self.settings_data.get("sysop_role_id"))
-
-        await interaction.response.send_message(content=f"Emergency stop has been activated. Report sent to <#{guild_alert_channel.id}>.", ephemeral=True)
-        await guild_alert_channel.send(
-            content=f"# :warning: Emergency Stop Activation\n\n{sysop_role_id.mention}\n\n {interaction.user.mention} activated EnduraBot's **emergency stop** at this time. Please speak with them for details.\n\n EnduraBot will need to be manually rebooted in Portainer.",
-            allowed_mentions=self.default_allowed_mentions
-            )
-
-        logger.critical(f"Emergency stop activated by {interaction.user.name} ({interaction.user.id}). Shutting down...")
-        await self.bot.close()
-
 # --- COMMAND: /info ---
 
     @app_commands.command(name="info", description="Quick access to community relevant information.")
