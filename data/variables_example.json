@@ -3,7 +3,6 @@
     "docs": "https://myawesomedocumentationsite.org",
     "version": "2.0-beta",
     "quotes_channel_id": 9876543210987654321,
-    "alert_channel_id": 1234567890123456789,
     "general_chat_channel_id": 2345678901234567890,
     "invite_alert_channel_id": 2345678901234567890,
     "sysop_role_id": 3456789012345678901,
