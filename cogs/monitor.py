@@ -24,10 +24,6 @@ monitor_db = DBMonitor()
 class monitor(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.variables_file = {}
-        self.settings_data = SETTINGS_DATA
-        self.settings_data_g = config_loader.SETTINGS_DATA
-        self.misc_data_g = config_loader.MISC_DATA
 
         self.default_allowed_mentions = AllowedMentions(
                 everyone=False,

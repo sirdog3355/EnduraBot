@@ -9,9 +9,7 @@ logger = logging.getLogger('endurabot.' + __name__)
 
 class bot_insult(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
-        self.settings_data = SETTINGS_DATA
-        self.misc_data = MISC_DATA        
+        self.bot = bot     
     
         self.default_allowed_mentions = AllowedMentions(
                 everyone=False,

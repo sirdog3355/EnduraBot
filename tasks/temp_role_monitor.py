@@ -18,7 +18,6 @@ class take_l_monitor(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.guild = bot.get_guild(GUILD_ID)
-        self.settings_data = SETTINGS_DATA
         self.check_length_minutely.start()
 
     def cog_unload(self):

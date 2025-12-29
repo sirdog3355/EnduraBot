@@ -17,7 +17,6 @@ def find_invite_by_code(invite_list, code):
 class invites_use(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.settings_data = SETTINGS_DATA
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -33,7 +32,7 @@ class invites_use(commands.Cog):
                     f"{member.name} ({member.id}) has joined with invite [{invite.code}] created by {invite.inviter} ({invite.inviter.id}) on {invite.created_at.strftime('%B %d, %Y')}.",
                 )
 
-                invite_alert_channel = self.bot.get_channel(self.settings_data.get("invite_alert_channel_id"))
+                invite_alert_channel = self.bot.get_channel(SETTINGS_DATA["invite_alert_channel_id"])
 
                 embed = discord.Embed(
                     title=":incoming_envelope: User has joined.",

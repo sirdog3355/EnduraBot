@@ -10,7 +10,6 @@ from discord.ext import commands
 from discord import app_commands, AllowedMentions
 import sys
 import logging
-import utils.config_loader as config_loader
 from utils.config_loader import SETTINGS_DATA, MISC_DATA
 from utils.permissions_checker import check_permissions
 
@@ -21,11 +20,6 @@ GUILD_ID = int(os.getenv('guild'))
 class user_cmds(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.variables_file = {}
-        self.settings_data = SETTINGS_DATA
-        self.misc_data = MISC_DATA
-        self.settings_data_g = config_loader.SETTINGS_DATA
-        self.misc_data_g = config_loader.MISC_DATA
 
         self.default_allowed_mentions = AllowedMentions(
                 everyone=False,
@@ -81,9 +75,9 @@ class user_cmds(commands.Cog):
     @app_commands.guilds(GUILD_ID)
     async def about(self, interaction: discord.Interaction):
 
-        repo = self.settings_data.get("repo")
-        version = self.settings_data.get("version")
-        docs = self.settings_data.get("docs")
+        repo = SETTINGS_DATA["repo"]
+        version = SETTINGS_DATA["version"]
+        docs = SETTINGS_DATA["docs"]
 
         embed = discord.Embed(
             title="About me",
@@ -115,7 +109,7 @@ class user_cmds(commands.Cog):
 
         if options.value == "links":
 
-            links_list = self.settings_data.get("links", {})
+            links_list = SETTINGS_DATA["links"]
 
             embed = discord.Embed(
                 title=f":link: {interaction.guild.name} Links",
@@ -135,9 +129,9 @@ class user_cmds(commands.Cog):
 
         if options.value == "ports":
 
-            ports_list = self.settings_data.get("ports", {})
-            ip = self.settings_data.get("ip")
-            url = self.settings_data.get("url")
+            ports_list = SETTINGS_DATA["ports"]
+            ip = SETTINGS_DATA["ip"]
+            url = SETTINGS_DATA["url"]
 
             embed = discord.Embed(
                 title=f":wireless: {interaction.guild.name} IP Addresses",

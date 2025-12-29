@@ -12,7 +12,6 @@ class log_daily_reset(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.log_daily_reset_func.start()
-        self.settings_data = SETTINGS_DATA
 
     def cog_unload(self):
         self.log_daily_reset_func.cancel()

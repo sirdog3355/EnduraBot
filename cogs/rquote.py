@@ -5,7 +5,6 @@ load_dotenv()
 
 import discord
 from discord.ext import commands
-from discord import app_commands
 from discord import app_commands, AllowedMentions
 from datetime import datetime, timezone, timedelta
 import random
@@ -34,15 +33,14 @@ def custom_cooldown(interaction: discord.Interaction) -> app_commands.Cooldown |
     if interaction.channel_id == SETTINGS_DATA["quotes_channel_id"]:
         return None
 
-    return app_commands.Cooldown(1, cog_instance.cooldown)
+    return app_commands.Cooldown(1, SETTINGS_DATA["rquote_cooldown_in_seconds"])
 
 class rquote(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.settings_data = SETTINGS_DATA
-        self.exempt_role_ids = set(SETTINGS_DATA["cooldown_exempt_roles"])
-        self.cooldown = SETTINGS_DATA["rquote_cooldown_in_seconds"]
+        # Below 4 class attributes deemed to be useful / necessary.
         self.themes = SETTINGS_DATA["rquote_themes"]
+        self.exempt_role_ids = set(SETTINGS_DATA["cooldown_exempt_roles"])
         self.oldest_quote_date = None
         self.misc_data = MISC_DATA
 
@@ -63,7 +61,7 @@ class rquote(commands.Cog):
 
     async def rquote(self, interaction: discord.Interaction):
 
-        ooc_channel_id = self.settings_data.get("quotes_channel_id")
+        ooc_channel_id = SETTINGS_DATA["quotes_channel_id"]
         ooc_channel = self.bot.get_channel(ooc_channel_id)
 
         has_attachment = False

@@ -5,7 +5,6 @@ load_dotenv()
 
 import discord
 from discord.ext import commands
-from discord import app_commands
 from discord import app_commands, AllowedMentions
 import logging
 from utils.config_loader import SETTINGS_DATA
@@ -22,7 +21,6 @@ GUILD_ID = int(os.getenv('guild'))
 class manage_role(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.settings_data = SETTINGS_DATA
     
         self.default_allowed_mentions = AllowedMentions(
                 everyone=False,
@@ -32,6 +30,7 @@ class manage_role(commands.Cog):
 
 
     # --- COMMAND: /editrole ---
+    
     role_list = SETTINGS_DATA["mod_editable_roles"]
     options_list = []
     for role_name, role_id in role_list.items():

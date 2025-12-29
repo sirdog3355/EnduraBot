@@ -9,7 +9,6 @@ from datetime import timedelta
 from discord.ext import commands
 from discord import app_commands, AllowedMentions
 import logging
-import utils.config_loader as config_loader
 from utils.config_loader import SETTINGS_DATA, MISC_DATA
 from classes.db_trole_handler import DBTempRole
 from utils.logging_setup import UNAUTHORIZED
@@ -24,11 +23,6 @@ db_temp_role = DBTempRole()
 class temp_role(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.variables_file = {}
-        self.settings_data = SETTINGS_DATA
-        self.misc_data = MISC_DATA
-        self.settings_data_g = config_loader.SETTINGS_DATA
-        self.misc_data_g = config_loader.MISC_DATA
 
         self.default_allowed_mentions = AllowedMentions(
                 everyone=False,

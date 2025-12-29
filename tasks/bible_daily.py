@@ -15,8 +15,6 @@ class bible_daily(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.daily_bible_quote.start()
-        self.settings_data = SETTINGS_DATA
-        self.misc_data = MISC_DATA
         self.oldest_quote_date = None
 
     def cog_unload(self):
@@ -27,10 +25,10 @@ class bible_daily(commands.Cog):
     async def daily_bible_quote(self):
         await self.bot.wait_until_ready()
 
-        general_chat_channel = self.bot.get_channel(self.settings_data.get("general_chat_channel_id"))
-        ooc_channel = self.bot.get_channel(self.settings_data.get("quotes_channel_id"))
-        random_gospel = random.choice(self.misc_data["bible_gospels"])
-        random_opener = random.choice(self.misc_data["daily_bible_openers"])
+        general_chat_channel = self.bot.get_channel(SETTINGS_DATA["general_chat_channel_id"])
+        ooc_channel = self.bot.get_channel(SETTINGS_DATA["quotes_channel_id"])
+        random_gospel = random.choice(MISC_DATA["bible_gospels"])
+        random_opener = random.choice(MISC_DATA["daily_bible_openers"])
 
         # Get date of first ever message in the quotes channel
         if self.oldest_quote_date == None:   
@@ -39,7 +37,6 @@ class bible_daily(commands.Cog):
             ]
             
             self.oldest_quote_date = oldest_msg[0].created_at
-
 
         # Current date - date roughly close to the first quote in #out-of-context
         num_days = datetime.now(timezone.utc) - self.oldest_quote_date

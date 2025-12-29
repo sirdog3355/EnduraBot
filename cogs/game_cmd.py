@@ -5,7 +5,6 @@ load_dotenv()
 
 import discord
 from discord.ext import commands
-from discord import app_commands
 from discord import app_commands, AllowedMentions
 import logging
 import datetime
@@ -23,7 +22,6 @@ GUILD_ID = int(os.getenv('guild'))
 class game_cmd(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.settings_data = SETTINGS_DATA
     
         self.default_allowed_mentions = AllowedMentions(
                 everyone=False,

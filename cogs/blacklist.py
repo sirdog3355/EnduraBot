@@ -5,7 +5,6 @@ load_dotenv()
 
 import discord
 from discord.ext import commands
-from discord import app_commands
 from discord import app_commands, AllowedMentions
 import sys
 import logging
@@ -24,12 +23,6 @@ GUILD_ID = int(os.getenv('guild'))
 class blacklist(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.variables_file = {}
-        self.settings_data = SETTINGS_DATA
-        self.misc_data = MISC_DATA
-        self.settings_data_g = config_loader.SETTINGS_DATA
-        self.misc_data_g = config_loader.MISC_DATA
-    
         self.default_allowed_mentions = AllowedMentions(
                 everyone=False,
                 users=True, 
@@ -51,7 +44,7 @@ class blacklist(commands.Cog):
     @app_commands.guilds(GUILD_ID)
     async def blacklist(self, interaction: discord.Interaction, options: app_commands.Choice[str], user: discord.Member):
 
-        guild_mod_role = discord.utils.get(interaction.guild.roles, id=self.settings_data.get("mod_role_id"))
+        guild_mod_role = discord.utils.get(interaction.guild.roles, id=SETTINGS_DATA["mod_role_id"])
         
         if options.value == "add":
 
