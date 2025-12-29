@@ -18,19 +18,19 @@ class member_monitor(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
 
-        invite_alert_channel = self.bot.get_channel(self.settings_data.get("invite_alert_channel_id"))
+        invite_alert_channel = self.bot.get_channel(SETTINGS_DATA["invite_alert_channel_id"])
         mod_role_id = SETTINGS_DATA["mod_role_id"]
         
-        if db.check_status(member.id) == True:
+        if db.check_status(f"{member.id}") == True:
 
-            name = db.get_name(member.id)
-            steamid = db.get_steamid(member.id)
-            mod_id = db.get_mod_id(member.id)
-            reason = db.get_reason(member.id)
-            level = db.get_level(member.id).upper()
-            timestamp = db.get_timestamp(member.id)
+            name = db.get_name(f"{member.id}")
+            steamid = db.get_steamid(f"{member.id}")
+            mod_id = db.get_mod_id(f"{member.id}")
+            reason = db.get_reason(f"{member.id}")
+            level = db.get_level(f"{member.id}").upper()
+            timestamp = db.get_timestamp(f"{member.id}")
 
-            if db.get_level(member.id) == "ban":
+            if db.get_level(f"{member.id}") == "ban":
                 await member.ban(reason="Member is on the member_monitor table with an alert level of BAN.")
 
                 embed = discord.Embed(
