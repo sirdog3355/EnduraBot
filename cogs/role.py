@@ -43,7 +43,7 @@ class temp_role(commands.Cog):
     @app_commands.choices(roles=options_list)
     @app_commands.describe(
         target = "Who is the target?",
-        length = "Length, in hours, the role should last for. (default: 24)",
+        length = "Length, in hours, the role should last for. (default: 24 | 0 = Permanent)",
         roles = f"Which role should be given to the target? (default: {options_list[0].name})",
         disconnect = "Should the target be disconnected from VC? (default: True)",
         check = "If true, will ONLY be told if there's an active timer for the target.",
