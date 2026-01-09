@@ -18,28 +18,50 @@ class DBChannelLink:
         self.cursor.execute(check_if_table_exists)
         self.connection.commit()
 
-    def check_status(self, text_id):
+    def check_status(self, id):
+        
         self.cursor.execute("SELECT text_channel_id FROM channel_link")
         tuple = self.cursor.fetchall()
         list = [ints[0] for ints in tuple]
 
-        if text_id in list:
+        if id in list:
             return True
-        else:
-            return False
+
+        self.cursor.execute("SELECT voice_channel_id FROM channel_link")
+        tuple2 = self.cursor.fetchall()
+        list2 = [ints[0] for ints in tuple2]
+
+        if id in list2:
+            return True
+
+        return False
 
     def add_link(self, text_id, voice_id):
 
         text_id = str(text_id)
         voice_id = str(voice_id)
 
-        text_channel = self.bot.get_channel(int(text_id))
-        voice_channel = self.bot.get_channel(int(voice_id))
+        if self.check_status(text_id) == True:
+            raise ValueError("Link already exists for text channel.")
 
-        if text_channel == None or voice_channel == None:
-            raise TypeError("One of the provided IDs is not a channel")
+        if self.check_status(voice_id) == True:
+            raise ValueError("Link already exists for voice channel.")
 
-        self.cursor.execut("INSERT INTO channel_link(text_channel_id, voice_channel_id) VALUES (?, ?)", (text_id, voice_id,))
+        self.cursor.execute("INSERT INTO channel_link(text_channel_id, voice_channel_id) VALUES (?, ?)", (text_id, voice_id,))
+        self.connection.commit()
+
+    def remove_link(self, text_id, voice_id):
+        
+        text_id = str(text_id)
+        voice_id = str(voice_id)
+
+        if self.check_status(text_id) == False:
+            raise ValueError("Link already doesn't exist for text channel.")
+
+        if self.check_status(voice_id) == False:
+            raise ValueError("Link already doesn't exist for voice channel.")
+
+        self.cursor.execute(f"DELETE FROM channel_link WHERE text_channel_id = ?", (text_id,))
         self.connection.commit()
 
     def get_text_id(self, voice_id):
