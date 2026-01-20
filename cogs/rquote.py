@@ -11,7 +11,7 @@ import random
 import re
 import logging
 from utils.config_loader import SETTINGS_DATA, MISC_DATA
-from utils.logging_setup import COOLDOWN, UNAUTHORIZED
+from utils.logging_setup import COOLDOWN, UNAUTHORIZED, RQUOTE
 from utils.permissions_checker import check_permissions
 from classes.db_rquote_used_handler import RquoteUsed
 
@@ -125,7 +125,7 @@ class rquote(commands.Cog):
 
         await interaction.response.send_message(embed=embed)
         logger.info(f"{interaction.user.name} ({interaction.user.id}) generated a random quote in #{interaction.channel.name} ({interaction.channel.id}).")
-        logger.debug(f"{interaction.user.name} ({interaction.user.id}) generated a random quote. Channel: [#{interaction.channel.name} ({interaction.channel.id})]. Dated: [{selected_msg.created_at.strftime("%B %d, %Y")}]. Theme: [{selected_theme_data["title"]}]. Opener: [{random_opener}]. Content: [{formatted_quote}]. Attachment: [{has_attachment}].")
+        logger.log(RQUOTE, f"{interaction.user.name} ({interaction.user.id}) generated a random quote. Channel: [#{interaction.channel.name} ({interaction.channel.id})]. Dated: [{selected_msg.created_at.strftime("%B %d, %Y")}]. Theme: [{selected_theme_data["title"]}]. Opener: [{random_opener}]. Shown Content: [{formatted_quote}]. Full Content: [{selected_msg.content}] Submitter: [{selected_msg.author} ({selected_msg.author.id})] Attachment: [{has_attachment}].")
 
     @rquote.error
     async def rquote_error(self, interaction: discord.Interaction, error: app_commands.AppCommandError):
@@ -197,7 +197,7 @@ class rquote(commands.Cog):
             if has_attachment == True:
                 embed2.set_image(url=selected_msg.attachments[0].url)
 
-            logger.debug(f"{interaction.user.name} ({interaction.user.id}) debugged a message. Verdict: [❌]. Dated: [{selected_msg.created_at.strftime("%B %d, %Y")}]. Message ID: [{selected_msg.id}]. Channel ID: [{channel_id}]. Author: [{selected_msg.author}]. Raw Content: [{selected_msg.content}]. Filtered Content: [{formatted_quote}]. Attachment: [{has_attachment}].")
+            logger.log(RQUOTE, f"{interaction.user.name} ({interaction.user.id}) debugged a message. Verdict: [❌]. Dated: [{selected_msg.created_at.strftime("%B %d, %Y")}]. Message ID: [{selected_msg.id}]. Channel ID: [{channel_id}]. Author: [{selected_msg.author} ({selected_msg.author.id})]. Raw Content: [{selected_msg.content}]. Filtered Content: [{formatted_quote}]. Attachment: [{has_attachment}].")
             await interaction.response.send_message(embeds=[embed1, embed2], ephemeral=True)
 
         # -- Phase 4: If message WOULD be selected, execute /rquote as normal but with the debugging embed too
@@ -235,7 +235,7 @@ class rquote(commands.Cog):
             if has_attachment == True:
                 embed1.set_image(url=selected_msg.attachments[0].url)
 
-            logger.debug(f"{interaction.user.name} ({interaction.user.id}) debugged a message. Verdict: [✅]. Dated: [{selected_msg.created_at.strftime("%B %d, %Y")}]. Message ID: [{selected_msg.id}]. Channel ID: [{channel_id}]. Author: [{selected_msg.author}]. Theme: [{selected_theme_data["opener_key"]}]. Opener: [{random_opener}]. Raw Content: [{selected_msg.content}]. Filtered Content: [{formatted_quote}]. Attachment: [{has_attachment}].")
+            logger.log(RQUOTE, f"{interaction.user.name} ({interaction.user.id}) debugged a message. Verdict: [✅]. Dated: [{selected_msg.created_at.strftime("%B %d, %Y")}]. Message ID: [{selected_msg.id}]. Channel ID: [{channel_id}]. Author: [{selected_msg.author} ({selected_msg.author.id})]. Theme: [{selected_theme_data["opener_key"]}]. Opener: [{random_opener}]. Raw Content: [{selected_msg.content}]. Filtered Content: [{formatted_quote}]. Attachment: [{has_attachment}].")
             await interaction.response.send_message(embeds=[embed1, embed2], ephemeral=True)
 
 async def setup(bot):
