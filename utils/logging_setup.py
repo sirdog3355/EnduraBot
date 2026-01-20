@@ -18,10 +18,17 @@ logging.addLevelName(BOOT, 'BOOT')
 INVITES = 39
 logging.addLevelName(INVITES, 'INVITES')
 
+RQUOTE = 15
+logging.addLevelName(RQUOTE, 'RQUOTE')
+
 # Custom filter so that debug messages go to their own file.
 class DebugOnlyFilter(logging.Filter):
     def filter(self, record):
         return record.levelno == logging.DEBUG
+
+class RquoteOnlyFilter(logging.Filter):
+    def filter(self, record):
+        return record.levelno == 15
 
 # Custom filter so that `discord.gateway` does't log anything below the WARNING level.
 logging.getLogger("discord.gateway").setLevel(logging.WARNING + 1)
@@ -65,6 +72,13 @@ def configure_logging():
     file_handler_debug.addFilter(DebugOnlyFilter()) # Apply the debug-only filter
     logger.addHandler(file_handler_debug)
     discord_logger.addHandler(file_handler_debug)
+
+    file_handler_rquote = logging.FileHandler(filename="logs/endurabot_rquote.log", encoding='utf-8', mode='a')
+    file_handler_rquote.setLevel(logging.DEBUG)
+    file_handler_rquote.setFormatter(standard_formatter)
+    file_handler_rquote.addFilter(RquoteOnlyFilter())
+    logger.addHandler(file_handler_rquote)
+    discord_logger.addHandler(file_handler_rquote)
 
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(logging.DEBUG)
