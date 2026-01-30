@@ -31,7 +31,7 @@ class monitor(commands.Cog):
                 roles=True
             )
 
-    @app_commands.command(name="monitor", description="Add someone to be monitored on join.")
+    @app_commands.command(name="monitor", description="Add or remove someone from being monitored on join.")
     @app_commands.check(check_permissions)
     @app_commands.guilds(GUILD_ID)
     @app_commands.choices(level = [
