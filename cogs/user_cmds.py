@@ -27,47 +27,6 @@ class user_cmds(commands.Cog):
                 roles=True
             )
 
-# --- COMMAND: /user ---
-
-    @app_commands.command(name="user", description="Get information on a server member.")
-    @app_commands.check(check_permissions)
-    @app_commands.guilds(GUILD_ID)
-    @app_commands.describe(
-        user = "Member to get information on."
-    )
-    async def user(self, interaction: discord.Interaction, user: discord.Member):
-
-        create_epoch = round(user.created_at.timestamp()) #Get UNIX timestamp for when the member's account was created.
-        join_epoch = round(user.joined_at.timestamp()) #Get UNIX timestamp for when member joined the Discord.
-        role_ids = [f"<@&{role.id}>" for role in user.roles if role.name != "@everyone"] #Get list of all role IDs the user has, excluding the default @@everyone role.
-
-        if user.bot:
-            bot_emoji = ":white_check_mark:"
-        else:
-            bot_emoji = ":x:"
-
-        if user.premium_since == None:
-            premium_emoji = ":x:"
-        else:
-            premium_emoji = ":white_check_mark:"
-
-        embed = discord.Embed(title=f"Information on {user.name}.", color=discord.Color.green())
-        embed.set_thumbnail(url=user.display_avatar.url)
-        embed.add_field(name="Identity", value=f"{user.mention} ({user.id})", inline=False)
-        embed.add_field(name="Global Name", value=user.global_name, inline=False)
-        embed.add_field(name="Account Created", value=f"<t:{create_epoch}:f> (<t:{create_epoch}:R>)", inline=False)
-        embed.add_field(name="Joined", value=f"<t:{join_epoch}:f> (<t:{join_epoch}:R>)", inline=False)
-        embed.add_field(name="Bot?", value=bot_emoji)
-        embed.add_field(name="Has Nitro?", value=premium_emoji)
-
-        if len(user.roles) == 1: #We do -1 to exclude @@everyone.
-            embed.add_field(name="Roles", value="None", inline=False)
-        else:
-            embed.add_field(name="Roles", value=' | '.join(role_ids), inline=False)
-
-        await interaction.response.send_message(embed=embed, ephemeral=True)
-        logger.info(f"{interaction.user.name} ({interaction.user.id}) ran /user on {user.name} ({user.id}).")
-
 # --- COMMAND: /about ---
 
     @app_commands.command(name="about", description="Get information about EnduraBot.")
