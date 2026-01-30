@@ -95,7 +95,7 @@ class channel_link_cog(commands.Cog):
             channel_link.get_links_by_key(id)
         except ValueError as e:
             await interaction.response.send_message(e, ephemeral=True)
-            logger.error(f"{interaction.user.name} ({interaction.user.id}) got an error when to delete a link. Error: [{e}]")
+            logger.error(f"{interaction.user.name} ({interaction.user.id}) got an error when trying to delete a link. Error: [{e}]")
         
         get_channels = channel_link.get_links_by_key(id)
 
@@ -106,7 +106,7 @@ class channel_link_cog(commands.Cog):
         channel_link.remove_link(id)
 
         await interaction.response.send_message(f"**Success**: <#{vc_channel.id}> :broken_chain: <#{txt_channel.id}>.", ephemeral=True)
-        logger.info(f"{interaction.user.name} ({interaction.user.id}) remmoved the link between #{vc_channel.name} ({vc_channel.id}) and #{txt_channel.name} ({txt_channel.id}).")
+        logger.info(f"{interaction.user.name} ({interaction.user.id}) removed the link between #{vc_channel.name} ({vc_channel.id}) and #{txt_channel.name} ({txt_channel.id}).")
 
 
 async def setup(bot):

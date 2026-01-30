@@ -37,7 +37,7 @@ class channel_link_listener(commands.Cog):
                 perms = txt_channel.permissions_for(role)
 
                 if perms.read_messages:
-                    logger.debug(f"{member.name} ({member.id}) joined VC {after.channel.name} linked to #{txt_channel.name}. {member.name} has role [{role}] which grants read permissions. Nothing to do.")
+                    logger.debug(f"{member.name} ({member.id}) joined VC {after.channel.name} linked to #{txt_channel.name}. {member.name} has role [@{role}] which grants read permissions. Nothing to do.")
                     return
 
             # If the user still has overwrites in the channel, do nothing.
