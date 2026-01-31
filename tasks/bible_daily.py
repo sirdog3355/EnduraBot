@@ -5,6 +5,7 @@ import logging
 import random
 import re
 from utils.config_loader import SETTINGS_DATA, MISC_DATA
+from utils.logging_setup import RQUOTE
 from classes.db_rquote_used_handler import RquoteUsed
 
 dupe_blocker = RquoteUsed()
@@ -77,7 +78,7 @@ class bible_daily(commands.Cog):
 
         await general_chat_channel.send(content=f"# ✝️ Bible Quote of the Day\n\n:palms_up_together: {random_opener}", embed=embed)
         logger.info("Daily bible quote sent.")
-        logger.debug(f"Daily bible quote sent. Channel: [#{general_chat_channel.name} ({general_chat_channel.id})]. Dated: [{selected_msg.created_at.strftime("%B %d, %Y")}]. Opener: [{random_opener}]. Gospel: [{random_gospel}]. Content: [{formatted_quote}].")
+        logger.log(RQUOTE, f"Daily bible quote sent. Channel: [#{general_chat_channel.name} ({general_chat_channel.id})]. Dated: [{selected_msg.created_at.strftime("%B %d, %Y")}]. Opener: [{random_opener}]. Gospel: [{random_gospel}]. Content: [{formatted_quote}].")
 
     @daily_bible_quote.before_loop
     async def before_daily_bible_quote(self):
