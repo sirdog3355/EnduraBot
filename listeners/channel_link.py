@@ -21,16 +21,20 @@ class channel_link_listener(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        
+
+        # If the user hasn't left or joined a unique channel, then the event trigger isn't relevant to us.
+        if after.channel == before.channel:
+            return
+
+        # If the member is a native Discord administrator, then the event trigger isn't relevant to us.
+        if member.guild_permissions.administrator:
+            return
+
         # Initiate logic if user joins a linked channel
         if not after.channel == None and channel_link.check_status(after.channel.id) == True:
         
             txt_channel_id = channel_link.get_text_id(after.channel.id)
             txt_channel = self.bot.get_channel(int(txt_channel_id))
-
-            if member.guild_permissions.administrator:
-                logger.debug(f"{member.name} ({member.id}) joined VC {after.channel.name} linked to #{txt_channel.name}. {member.name} is an administrator. Nothing to do.")
-                return
 
             # If the user already has a role that can see the linked channel, do nothing.
             for role in member.roles:
