@@ -113,15 +113,18 @@ async def on_app_command_error(interaction: discord.Interaction, error: app_comm
             await interaction.response.send_message(embed=embed, ephemeral=True)
             return
 
-        elif interaction.command.name in SETTINGS_DATA["disabled_cmds"]:
+    cmds = SETTINGS_DATA["disabled_cmds"].items()
+    for name, reason in cmds:
+        if interaction.command.name == name:
 
-            logger.log(UNAUTHORIZED, f"{interaction.user.name} ({interaction.user.id}) attempted to run disabled command /{interaction.command.name}.")
+            logger.log(UNAUTHORIZED, f"{interaction.user.name} ({interaction.user.id}) attempted to run disabled command /{interaction.command.name}. Reason: [{reason}]")
 
             embed = discord.Embed(
                 title=":gear: Command disabled.",
-                description=f"Command `/{interaction.command.name}` has been disabled.",
+                description=f"`/{interaction.command.name}` has been disabled by a systems operator. Review the field below for more details.",
                 color=8650752
             )
+            embed.add_field(name="Reason", value=reason)
             await interaction.response.send_message(embed=embed, ephemeral=True)
             return
         
