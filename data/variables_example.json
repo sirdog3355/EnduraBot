@@ -44,9 +44,9 @@
     "blacklisted_itad_shops": {
         "Fanatical": 6
     },
-    "disabled_cmds": [
-        "YOUR_COMMAND_HERE"
-    ],
+    "disabled_cmds": {
+        "YOUR_COMMAND_HERE": "YOUR READON HERE"
+    },
     "log_text_exclude": [
         "Loaded",
         "^---",

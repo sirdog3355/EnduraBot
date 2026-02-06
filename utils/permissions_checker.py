@@ -16,8 +16,10 @@ async def check_permissions(interaction: discord.Interaction):
         return False
 
     # If command is disabled, reject.
-    if interaction.command.name in SETTINGS_DATA["disabled_cmds"]:
-        return False
+    cmds = SETTINGS_DATA["disabled_cmds"].items()
+    for name, reason in cmds:
+        if interaction.command.name == name:
+            return False
     
     # If no IDs exist, then the command doesn't have a restriction.
     if not eligible_role_ids:
