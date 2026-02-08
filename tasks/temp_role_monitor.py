@@ -28,7 +28,7 @@ class take_l_monitor(commands.Cog):
         timestamps = temp_role.get_timestamps()
 
         for timestamp in timestamps:
-            if datetime.now() > timestamp:
+            if datetime.now() < timestamp:
                 continue
 
             user_id = int(temp_role.get_user_id_by_timestamp(timestamp))
