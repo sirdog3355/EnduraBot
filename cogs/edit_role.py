@@ -47,46 +47,48 @@ class manage_role(commands.Cog):
         # And now we make it an integer for the "get_role" method.
         role = interaction.guild.get_role(int(options.value))
 
-        # Do not mess with the datatype declarations below. They are necessary due to how the SQLITE table is setup.
-        if db_temp_role.check_status(str(user.id)) and int(db_temp_role.get_role(str(user.id))) == int(options.value):
+        target = interaction.guild.get_member(user.id)
 
-            if discord.utils.get(interaction.guild.roles, id=int(db_temp_role.get_role(str(user.id)))) in user.roles:
-                await interaction.response.send_message(f"<@{user.id}> was given <@&{options.value}> as a **temporary role** via `/trole`. If you would like to remove it, please use the `remove` arguement of `/trole` instead.", ephemeral=True)
-                logger.log(UNAUTHORIZED, f"{interaction.user.name} ({interaction.user.id}) attempted to remove temporary role {options.name} from {user.name} ({user.id}) via /editrole.")
+        # Do not mess with the datatype declarations below. They are necessary due to how the SQLITE table is setup.
+        if db_temp_role.check_status(str(target.id)) and int(db_temp_role.get_role(str(target.id))) == int(options.value):
+
+            if discord.utils.get(interaction.guild.roles, id=int(db_temp_role.get_role(str(target.id)))) in target.roles:
+                await interaction.response.send_message(f"<@{target.id}> was given <@&{options.value}> as a **temporary role** via `/trole`. If you would like to remove it, please use the `remove` arguement of `/trole` instead.", ephemeral=True)
+                logger.log(UNAUTHORIZED, f"{interaction.target.name} ({interaction.target.id}) attempted to remove temporary role {options.name} from {target.name} ({target.id}) via /editrole.")
                 return
 
         # Change roles.
-        if role in user.roles:
-            await user.remove_roles(role)
+        if role in target.roles:
+            await target.remove_roles(role)
 
             embed = discord.Embed(
                 title="⭕ Role Removed",
-                description=f"{role.mention} has been successfully removed from {user.mention}.",
+                description=f"{role.mention} has been successfully removed from {target.mention}.",
                 color=8650752 
                 )
             
             if ping == True:    
-                await interaction.response.send_message(embed=embed, content=f"{user.mention}", allowed_mentions=self.default_allowed_mentions)
-                logger.info(f"{interaction.user.name} ({interaction.user.id}) removed @{role.name} ({role.id}) from {user.name} ({user.id}). Ping: [TRUE]")
+                await interaction.response.send_message(embed=embed, content=f"{target.mention}", allowed_mentions=self.default_allowed_mentions)
+                logger.info(f"{interaction.target.name} ({interaction.target.id}) removed @{role.name} ({role.id}) from {target.name} ({target.id}). Ping: [TRUE]")
             else:
                 await interaction.response.send_message(embed=embed)
-                logger.info(f"{interaction.user.name} ({interaction.user.id}) removed @{role.name} ({role.id}) from {user.name} ({user.id}). Ping: [FALSE]")
+                logger.info(f"{interaction.target.name} ({interaction.target.id}) removed @{role.name} ({role.id}) from {target.name} ({target.id}). Ping: [FALSE]")
 
         else:
 
-            await user.add_roles(role)
+            await target.add_roles(role)
             embed = discord.Embed(
                 title="🟢 Role Added",
-                description=f"{role.mention} has been successfully added to {user.mention}.",
+                description=f"{role.mention} has been successfully added to {target.mention}.",
                 color=3800852 
                 )
             
             if ping == True:    
-                await interaction.response.send_message(embed=embed, content=f"{user.mention}", allowed_mentions=self.default_allowed_mentions)
-                logger.info(f"{interaction.user.name} ({interaction.user.id}) added @{role.name} ({role.id}) to {user.name} ({user.id}). Ping: [TRUE]")
+                await interaction.response.send_message(embed=embed, content=f"{target.mention}", allowed_mentions=self.default_allowed_mentions)
+                logger.info(f"{interaction.target.name} ({interaction.target.id}) added @{role.name} ({role.id}) to {target.name} ({target.id}). Ping: [TRUE]")
             else:
                 await interaction.response.send_message(embed=embed)
-                logger.info(f"{interaction.user.name} ({interaction.user.id}) added @{role.name} ({role.id}) to {user.name} ({user.id}). Ping: [FALSE]")
+                logger.info(f"{interaction.target.name} ({interaction.target.id}) added @{role.name} ({role.id}) to {target.name} ({target.id}). Ping: [FALSE]")
         
 async def setup(bot):
     await bot.add_cog(manage_role(bot))
