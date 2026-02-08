@@ -25,26 +25,59 @@ class take_l_monitor(commands.Cog):
 
     @tasks.loop(minutes=1)
     async def check_length_minutely(self):
-
         timestamps = temp_role.get_timestamps()
 
         for timestamp in timestamps:
             if datetime.now() > timestamp:
-                user = self.guild.get_member(
-                    int(temp_role.get_user_id_by_timestamp(timestamp))
+                continue
+
+            user_id = int(temp_role.get_user_id_by_timestamp(timestamp))
+            role_id = int(temp_role.get_role_by_timestamp(timestamp))
+
+            role = self.guild.get_role(role_id)
+            if role is None:
+                logger.warning(f"Role {role_id} no longer exists. Cleaning DB entry.")
+                temp_role.remove_user_by_timestamp(timestamp)
+                continue
+
+            member = self.guild.get_member(user_id)
+
+            if member is None or not member.roles:
+                try:
+                    member = await self.guild.fetch_member(user_id)
+                except discord.NotFound:
+                    logger.info(
+                        f"User [{user_id}] no longer in guild. Cleaning database entry."
+                    )
+                    temp_role.remove_user_by_timestamp(timestamp)
+                    continue
+
+            if role in member.roles:
+                try:
+                    await member.remove_roles(
+                        role,
+                        reason="Temporary role duration expired"
+                    )
+                    logger.info(
+                        f"{member} ({user_id}) temp role @{role.name} expired. Role removed."
+                    )
+                except discord.Forbidden:
+                    logger.error(
+                        f"Missing permissions to remove @{role.name} from {member} ({member.id})."
+                    )
+                    continue
+                except discord.HTTPException as e:
+                    logger.error(
+                        f"HTTP error removing @{role.name} from {member} ({member.id}): {e}"
+                    )
+                    continue
+            else:
+                logger.info(
+                    f"{member} ({user_id}) temp role @{role.name} already removed."
                 )
-                role = self.guild.get_role(int(temp_role.get_role_by_timestamp(timestamp)))
-                if role in user.roles:
-                    await user.remove_roles(role)
-                    logger.info(
-                        f"{temp_role.get_user_name_by_timestamp(timestamp)} ({temp_role.get_user_id_by_timestamp(timestamp)}) was given [@{role.name}] temporarily and the duration has ended. Role removed and status removed from database."
-                    )
-                    temp_role.remove_user_by_timestamp(timestamp)
-                else:
-                    logger.info(
-                        f"{temp_role.get_user_name_by_timestamp(timestamp)} ({temp_role.get_user_id_by_timestamp(timestamp)}) was given [@{role.name}] temporarily and the duration has ended. Role detected to have been removed early. Removed status from database."
-                    )
-                    temp_role.remove_user_by_timestamp(timestamp)
+
+            temp_role.remove_user_by_timestamp(timestamp)
+
 
     @check_length_minutely.before_loop
     async def before_daily_bible_quote(self):
