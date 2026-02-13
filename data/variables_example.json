@@ -46,12 +46,6 @@
     "disabled_cmds": {
         "YOUR_COMMAND_HERE": "YOUR READON HERE"
     },
-    "log_text_exclude": [
-        "Loaded",
-        "^---",
-        "Synced",
-        "Hello, world!"
-    ],
     "rquote_themes": {
         "hr": {
             "title": "💼 HR Office of EDC, Inc.",
