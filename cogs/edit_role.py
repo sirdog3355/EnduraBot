@@ -38,7 +38,7 @@ class manage_role(commands.Cog):
         #So need to make it a string using an f-string.
         options_list.append(app_commands.Choice(name=role_name,value=f"{role_id}"))
 
-    @app_commands.command(name="editrole", description="Give or revoke roles.")
+    @app_commands.command(name="editrole", description="Give or revoke roles indefinitely.")
     @app_commands.check(check_permissions)
     @app_commands.choices(options=options_list)
     @app_commands.guilds(GUILD_ID)
