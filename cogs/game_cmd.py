@@ -37,11 +37,11 @@ class game_cmd(commands.Cog):
     @app_commands.guilds(GUILD_ID)
     @app_commands.describe(
         title = "Game title to search for.",
-        private = "Should the output only be visible by you? (default: False)"
+        private = "Should the output only be visible by you? (default: True)"
     )
     @app_commands.checks.cooldown(SETTINGS_DATA["game_num_uses_before_cooldown"], SETTINGS_DATA["game_cooldown_in_seconds"])
 
-    async def game(self, interaction: discord.Interaction, title: str, private: bool = False):
+    async def game(self, interaction: discord.Interaction, title: str, private: bool = True):
 
         itad_name = "[IsThereAnyDeal](https://isthereanydeal.com/)"
     
