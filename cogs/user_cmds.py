@@ -132,39 +132,5 @@ class user_cmds(commands.Cog):
         await interaction.response.send_message("Message sent.", ephemeral=True)
         await interaction.channel.send(msg)
 
-# --- COMMAND: /logs ---
-
-    @app_commands.command(name="logs", description="Review EnduraBot's logs.")
-    @app_commands.check(check_permissions)
-    @app_commands.guilds(GUILD_ID)
-    @app_commands.describe(
-        lines = "Number of log lines to review. (default: 15)"
-    )
-    async def logs(self, interaction: discord.Interaction, lines: int = 15):
-
-        await interaction.response.defer(ephemeral=True)
-
-        log_file = "logs/endurabot.log"
-
-        chosen_lines = [
-            line for line in reversed(list(open(log_file)))
-                if not any(re.search(text, line) for text in SETTINGS_DATA["log_text_exclude"])
-        ]
-
-        if sum(len(i) for i in chosen_lines[0:lines]) > 4096:
-            await interaction.followup.send(content="Number of lines requested exceeds Discord's embed character limit. Please try again.", ephemeral=True)
-            logger.error(f"{interaction.user.name} ({interaction.user.id}) attempted to review {lines} line(s) from EnduraBot's logs but the output exceeded Discord's character limit for embeds.")
-            return
-
-        embed = discord.Embed(
-            title=":notepad_spiral: Logs",
-            description=f"```\n{'\n'.join(reversed(chosen_lines[0:lines]))}\n```",
-            color=16032240
-        )
-
-        await interaction.followup.send(embed=embed, ephemeral=True)
-        logger.info(f"{interaction.user.name} ({interaction.user.id}) reviewed the last {lines} line(s) from EnduraBot's logs.")
-
-
 async def setup(bot):
     await bot.add_cog(user_cmds(bot))
