@@ -25,7 +25,6 @@
     "game_num_uses_before_cooldown": 5,
     "max_old_quotes": 300,
     "rquote_footer": "This scenario is not representative of the Endurance Coalition's values.",
-    "bot_insult_chance": 1,
     "bibleq_hour_of_day": 1,
     "bibleq_min_of_day": 0,
     "log_new_day_hour_utc": 0,
